@@ -5,10 +5,13 @@
         <script src="moment.js"></script>
         <script src="jquery-1.8.3.min.js"></script>
         <style type="text/css">
+        #calendar {
+            display:inline-block;
+        }
         #calendar table {
             border-collapse: collapse;
             width:940px;
-            margin: 0 auto;
+            display:inline-block;
         }
 
         #calendar td {
@@ -23,14 +26,22 @@
         #calendar .other-month {
             background-color: #ddd;
         }
+        #eventDetails {
+            display:inline-block;
+            width: 300px;
+            vertical-align: top;
+        }
         </style>
     </head>
     <body>
         <div id="calendar"></div>
+        <div id="eventDetails"></div>
         <button type="button" id="decrementMonthButton">Decrement Month</button>
         <button type="button" id="incrementMonthButton">Increment Month</button>
 
     <script>
+
+        
             
         var printlog = function(str){
             if (console){
@@ -45,6 +56,8 @@
 
 
         var calendar = (function(){
+            var items = {};
+            var itemsById = {};
             var monthNames = [ 
                 "January", 
                 "February", 
@@ -168,13 +181,39 @@
                     dateHolder.appendChild(document.createTextNode(yearMonthDay[2]));
                     td.appendChild(dateHolder);
                     td.setAttribute("data-calendar",weeks[wToCreate][i]);
+
+                    var monthQ = "month"+(m+1);
+                    var yearQ = "year"+y;
+
+                    if (items[yearQ][monthQ]){
+                        for (k=0;k<items[yearQ][monthQ].length;k++){
+                            var itemDate = items[yearQ][monthQ][k].date.split("/");
+                            if (itemDate[1] == yearMonthDay[2] && itemDate[0] == yearMonthDay[1]){
+                                var itemDiv = document.createElement('div');
+                                itemDiv.appendChild(document.createTextNode(items[yearQ][monthQ][k].title))
+                                var functionString = "calendar.getEventDeatils("+items[yearQ][monthQ][k].eventId+")";
+                                itemDiv.setAttribute('onclick',functionString);
+                                td.appendChild(itemDiv);
+                            }
+                        }
+                    }
+
                     tr.appendChild(td);
                 }
                 return tr;
             }
             return {
-                
+                getEventDeatils : function(id){
+                    var elem = document.getElementById('eventDetails');
+                    elem.innerHTML = "";
+                    for (var n in itemsById[id]){
+                        elem.appendChild(document.createTextNode(n+": "+itemsById[id][n]));
+                        elem.appendChild(document.createElement('br'));
+
+                    }
+                },
                 loadCalendarView : function(monthToCreate,yearToCreate){
+                    console.log(items);
                     document.getElementById('calendar').innerHTML = '';
                     if ((typeof monthToCreate != 'number') || (typeof yearToCreate != 'number')){
                         printlog('loadCalendarView requires month(int) and year(int)');
@@ -214,10 +253,52 @@
                     if (err || stat == 400){
 
                     } else {
-                        console.log('good to go');
+                        //var items = [];
+                        var lines = data.split("\n");
+                        var headers = lines[0].split(",");
+                        console.log(headers);
+
+                        for (i=1;i<lines.length;i++){
+                            var thisObject = {};
+
+                            var thisLine = lines[i].split(",");
+
+                            var MonthDayYear = thisLine[0].split("/");
+
+                            var thisItemsYear = "year"+MonthDayYear[2];
+                            var thisItemsMonth = "month"+MonthDayYear[0];
+
+                            if (!items[thisItemsYear]){
+                                items[thisItemsYear] = {};
+                            }
+
+                            if (!items[thisItemsYear][thisItemsMonth]){
+                                items[thisItemsYear][thisItemsMonth] = [];
+                            }
+
+
+
+                            thisObject[headers[0]] = thisLine[0];
+                            thisObject[headers[1]] = thisLine[1];
+                            thisObject[headers[2]] = thisLine[2];
+                            thisObject[headers[3]] = thisLine[3];
+                            thisObject.eventId = Math.floor((Math.random()*100000000000)+1);
+
+                            itemsById[thisObject.eventId] = {};
+
+                            itemsById[thisObject.eventId][headers[0]] = thisLine[0];
+                            itemsById[thisObject.eventId][headers[1]] = thisLine[1];
+                            itemsById[thisObject.eventId][headers[2]] = thisLine[2];
+                            itemsById[thisObject.eventId][headers[3]] = thisLine[3];
+
+
+                            items[thisItemsYear][thisItemsMonth].push(thisObject);
+
+                        }
+                        
+                        
                     }
                 }    
-        
             }
         })();
         
@@ -232,34 +313,30 @@
                 },
                 complete: function(data){
                     calendar.parseCSV(null,data.status,data.responseText);
-                    return
+                    var today = new Date();
+                    calendar.loadCalendarView(today.getMonth(),today.getFullYear());
+
+                    document.getElementById('decrementMonthButton').addEventListener('click',function(){
+                        if (today.getMonth() != 0){
+                            today.setMonth(today.getMonth()-1);
+                        } else {
+                            today.setFullYear(today.getFullYear()-1);
+                            today.setMonth(11);
+                        }
+                        printlog('requesting date '+today.getMonth()+", "+today.getFullYear())
+
+                        calendar.loadCalendarView(today.getMonth(),today.getFullYear());
+                    });
+                    document.getElementById('incrementMonthButton').addEventListener('click',function(){
+                        if (today.getMonth() != 11){
+                            today.setMonth(today.getMonth()+1);
+                        } else {
+                            today.setFullYear(today.getFullYear()+1);
+                            today.setMonth(0);
+                        }
+                        calendar.loadCalendarView(today.getMonth(),today.getFullYear());
+                    });
                 }
-            });
-
-
-
-            var today = new Date();
-            calendar.loadCalendarView(today.getMonth(),today.getFullYear());
-
-            document.getElementById('decrementMonthButton').addEventListener('click',function(){
-                if (today.getMonth() != 0){
-                    today.setMonth(today.getMonth()-1);
-                } else {
-                    today.setFullYear(today.getFullYear()-1);
-                    today.setMonth(11);
-                }
-                printlog('requesting date '+today.getMonth()+", "+today.getFullYear())
-
-                calendar.loadCalendarView(today.getMonth(),today.getFullYear());
-            });
-            document.getElementById('incrementMonthButton').addEventListener('click',function(){
-                if (today.getMonth() != 11){
-                    today.setMonth(today.getMonth()+1);
-                } else {
-                    today.setFullYear(today.getFullYear()+1);
-                    today.setMonth(0);
-                }
-                calendar.loadCalendarView(today.getMonth(),today.getFullYear());
             });
         }
     </script>
