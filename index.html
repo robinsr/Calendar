@@ -3,40 +3,81 @@
     <head>
         <title>CSV to Calendar</title>
         <script src="jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="fancybox/jquery.fancybox.js"></script>
+        <link rel="stylesheet" href="fancybox/jquery.fancybox.css" type="text/css" media="screen" />
         <style type="text/css">
-        #calendar {
-            display:inline-block;
+        body {
+            background: url(bg.jpg) top center no-repeat #545454;
+            font-family: Verdana,Tahoma,sans-serif;
+        }
+        #calendar caption {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 24px;  
         }
         #calendar table {
-            border-collapse: collapse;
+            border-spacing: 4px;
             width:940px;
-            display:inline-block;
+            display:block;
+            margin:0 auto 0 auto;
         }
 
         #calendar td {
-            border: 1px solid black;
+            background-color:#efe0a5;
+            border-radius: 3px;
+            border-bottom-right-radius: 0px;
             vertical-align: top;
             width:134px;
-
+        }
+        #calendar td.table-header {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0);
+            color: #ffffff;
         }
         #calendar td.Day {
+            max-height: 80px;
+            overflow: hidden;
             height: 80px;
+            font-size: 12px;            
         }
         #calendar .other-month {
-            background-color: #ddd;
+            background-color: #777;
+        }
+        #calendar .DateHolder {
+            font-weight: bold;
         }
         #eventDetails {
             display:inline-block;
             width: 300px;
             vertical-align: top;
         }
+        #eventDetails .eventDetailsItem {
+            font-weight: bold;
+        }
+        #eventDetails .eventDetailsItem:first-letter {
+            text-transform: uppercase;
+        }
+        #eventDetails .closeModal {
+            text-align: center;
+        }
+        #eventDetails .closeModal p {
+            font-size: 11px;
+            font-style: italic;
+            cursor: pointer;
+        }
+        #buttonControls {
+            width: 300px;
+            margin: 0 auto 0 auto;
+        }
         </style>
     </head>
     <body>
         <div id="calendar"></div>
-        <div id="eventDetails"></div>
-        <button type="button" id="decrementMonthButton">Decrement Month</button>
-        <button type="button" id="incrementMonthButton">Increment Month</button>
+        <div id="eventDetails" style="display:none;"></div>
+        <div id="buttonControls">
+            <button type="button" id="decrementMonthButton">Decrement Month</button>
+            <button type="button" id="incrementMonthButton">Increment Month</button>
+        </div>
 
     <script>
 
@@ -163,8 +204,7 @@
                 5:'Friday',
                 6:'Saturday'
             }
-            makeWeekRow = function(wToCreate,m,y){
-                console.log('make week row ',m)
+            makeWeekRowAndAddItems = function(wToCreate,m,y){
                 var tr = document.createElement('tr');
                 for (i=0;i<7;i++){
                     var yearMonthDay = weeks[wToCreate][i].split("-"); 
@@ -188,7 +228,7 @@
                         for (k=0;k<items[yearQ][monthQ].length;k++){
                             var itemDate = items[yearQ][monthQ][k].date.split("/");
                             if (itemDate[1] == yearMonthDay[2] && itemDate[0] == yearMonthDay[1]){
-                                var itemDiv = document.createElement('div');
+                                var itemDiv = document.createElement('li');
                                 itemDiv.appendChild(document.createTextNode(items[yearQ][monthQ][k].title))
                                 var functionString = "calendar.getEventDeatils("+items[yearQ][monthQ][k].eventId+")";
                                 itemDiv.setAttribute('onclick',functionString);
@@ -205,14 +245,24 @@
                 getEventDeatils : function(id){
                     var elem = document.getElementById('eventDetails');
                     elem.innerHTML = "";
+                    var newHTML = "";
                     for (var n in itemsById[id]){
-                        elem.appendChild(document.createTextNode(n+": "+itemsById[id][n]));
-                        elem.appendChild(document.createElement('br'));
-
+                        newHTML += "<p class='eventDetailsItem'>"+n+":</p> "+itemsById[id][n]+"<br />";
                     }
+                    elem.innerHTML = newHTML;
+                    elem.innerHTML += "<div class='closeModal'><p>click here to close</p></div>";
+                    $.fancybox({
+                        content: $('#eventDetails'),
+                        modal: true,
+                        hideOnContentClick: true,
+                        showCloseButton: true
+                    });
+
+                    elem.addEventListener('click',function(){
+                        $.fancybox.close();
+                    })
                 },
                 loadCalendarView : function(monthToCreate,yearToCreate){
-                    console.log(items);
                     document.getElementById('calendar').innerHTML = '';
                     if ((typeof monthToCreate != 'number') || (typeof yearToCreate != 'number')){
                         printlog('loadCalendarView requires month(int) and year(int)');
@@ -243,19 +293,24 @@
                     }
                     
                     for (j=0;j<weeksToCreate.length;j++){
-                        table.appendChild(makeWeekRow(weeksToCreate[j],monthToCreate,yearToCreate));
+                        table.appendChild(makeWeekRowAndAddItems(weeksToCreate[j],monthToCreate,yearToCreate));
                     }
                     
                     tableElement.appendChild(table);
                 },
                 parseCSV : function(err,stat,data){
                     if (err || stat == 400){
-
+                        $("#eventDetails").text("There was a problem fetching the calendar data");
+                        $.fancybox({
+                            content: $('#eventDetails'),
+                            modal: true,
+                            hideOnContentClick: true,
+                            showCloseButton: true
+                        });
                     } else {
                         //var items = [];
                         var lines = data.split("\n");
                         var headers = lines[0].split(",");
-                        console.log(headers);
 
                         for (i=1;i<lines.length;i++){
                             var thisObject = {};
