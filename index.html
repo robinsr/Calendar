@@ -3,15 +3,25 @@
     <head>
         <title>CSV to Calendar</title>
         <script src="moment.js"></script>
+        <script src="jquery-1.8.3.min.js"></script>
         <style type="text/css">
         #calendar table {
             border-collapse: collapse;
+            width:940px;
+            margin: 0 auto;
         }
 
         #calendar td {
             border: 1px solid black;
-            padding:20px 10px 20px 10px;
             vertical-align: top;
+            width:134px;
+
+        }
+        #calendar td.Day {
+            height: 80px;
+        }
+        #calendar .other-month {
+            background-color: #ddd;
         }
         </style>
     </head>
@@ -21,6 +31,12 @@
         <button type="button" id="incrementMonthButton">Increment Month</button>
 
     <script>
+            
+        var printlog = function(str){
+            if (console){
+                console.log(str);
+            }
+        }
             // gets day of the year ie 1-365
         Date.prototype.getDOY = function() {
             var onejan = new Date(this.getFullYear(),0,1);
@@ -28,7 +44,6 @@
         }
 
 
-        
         var calendar = (function(){
             var monthNames = [ 
                 "January", 
@@ -53,6 +68,7 @@
             var daysInEachMonth;
 
             function makeDaysInEachMonth(y){
+
                 var d = new Date();
                 d.setFullYear(y,11,31);
                 var totalsDaysThisYear = d.getDOY();
@@ -64,10 +80,11 @@
                 }
             }
 
-            var weeks = [];
+            var weeks;
             var weeksInEachMonth = [];
 
             function constructWeeksObject(year){
+                weeks = [];
                 makeDaysInEachMonth(year);
                 var janFirstDOY = getJanFirstDOY(year);
                 var week = [];
@@ -77,29 +94,30 @@
                 var currentDay = 1;
                 var currentMonth = 0;
                 for (i=fistDecDayInFirstWeek;i<32;i++){
-                    week.push(i)
+                    week.push((year-1)+"-12-"+i);
                 }
                 for (i=1;i<=janDaysInFirstWeek;i++){
-                    week.push(i);
+                    week.push(year+"-1-"+i);
                     currentDay = i;
                 }
                 weeks.push(week);
+                printlog(week);
                 var thisMonthsWeeks = [];
                 thisMonthsWeeks.push(0);
-                for (i=1;i<53;i++){
+                for (i=1;i<54;i++){
                     week = [];
                     for (j=0;j<7;j++){
                         if ((currentDay + 1) > daysInEachMonth[currentMonth]){
                             currentDay = 0;
                             currentMonth++;
                             currentDay++;
-                            week.push(currentDay);
+                            week.push(year+"-"+(currentMonth+1)+"-"+currentDay);
                             thisMonthsWeeks.push(i);
                             weeksInEachMonth.push(thisMonthsWeeks);
                             thisMonthsWeeks = [];
                         } else {
                             currentDay++;
-                            week.push(currentDay);
+                            week.push(year+"-"+(currentMonth+1)+"-"+currentDay);
                         }
                         if (j==6){
                             weeks.push(week);
@@ -133,15 +151,23 @@
                 5:'Friday',
                 6:'Saturday'
             }
-            makeWeekRow = function(wToCreate){
-                console.log('creating week #',wToCreate)
+            makeWeekRow = function(wToCreate,m,y){
+                console.log('make week row ',m)
                 var tr = document.createElement('tr');
                 for (i=0;i<7;i++){
-                    var dataAttribute; 
+                    var yearMonthDay = weeks[wToCreate][i].split("-"); 
                     var td = document.createElement('td');
-                    var className = "Day Day-"+dayName[i];
+                    if (yearMonthDay[1] == (m+1)){
+                        var className = "Day Day-"+dayName[i];
+                    } else {
+                        var className = "other-month Day Day-"+dayName[i];
+                    }
                     td.setAttribute('class',className);
-                    td.appendChild(document.createTextNode(weeks[wToCreate][i]+" "+dayName[i]));
+                    var dateHolder = document.createElement('div');
+                    dateHolder.className = "DateHolder";
+                    dateHolder.appendChild(document.createTextNode(yearMonthDay[2]));
+                    td.appendChild(dateHolder);
+                    td.setAttribute("data-calendar",weeks[wToCreate][i]);
                     tr.appendChild(td);
                 }
                 return tr;
@@ -150,45 +176,90 @@
                 
                 loadCalendarView : function(monthToCreate,yearToCreate){
                     document.getElementById('calendar').innerHTML = '';
-                    if (!(monthToCreate && yearToCreate) || (typeof monthToCreate != 'number') || (typeof yearToCreate != 'number')){
-                        console.log('loadCalendarView requires month(int) and year(int)');
+                    if ((typeof monthToCreate != 'number') || (typeof yearToCreate != 'number')){
+                        printlog('loadCalendarView requires month(int) and year(int)');
                         return
                     }
                     constructWeeksObject(yearToCreate);  
 
                     var weeksToCreate = weeksInEachMonth[monthToCreate]
 
-                    console.log(weeksToCreate);
-
                     var table = document.createElement('table');
 
                     var caption = document.createElement('caption');
-                    caption.appendChild(document.createTextNode(monthNames[monthToCreate]+", some year?"));
+                    caption.appendChild(document.createTextNode(monthNames[monthToCreate]+", "+yearToCreate));
                     table.appendChild(caption);
+
+                    var tr = document.createElement('tr');
+                    for (i=0;i<7;i++){
+                        var td = document.createElement('td');
+                        var className = "table-header";
+                        td.setAttribute('class',className);
+                        td.appendChild(document.createTextNode(dayName[i]));
+                        tr.appendChild(td);
+                    }
+                    table.appendChild(tr);
+
+                    if (weeksToCreate.length < 6){
+                        weeksToCreate.push(weeksToCreate[weeksToCreate.length-1]+1);
+                    }
                     
                     for (j=0;j<weeksToCreate.length;j++){
-                        console.log('making row');
-                        table.appendChild(makeWeekRow(weeksToCreate[j]));
+                        table.appendChild(makeWeekRow(weeksToCreate[j],monthToCreate,yearToCreate));
                     }
                     
                     tableElement.appendChild(table);
+                },
+                parseCSV : function(err,stat,data){
+                    if (err || stat == 400){
+
+                    } else {
+                        console.log('good to go');
+                    }
                 }    
         
             }
         })();
         
          window.onload = function(){
+
+            $.ajax({
+                url: 'data.csv',
+                type: 'get',
+                error: function(data){
+                    calendar.parseCSV(true);
+                    return
+                },
+                complete: function(data){
+                    calendar.parseCSV(null,data.status,data.responseText);
+                    return
+                }
+            });
+
+
+
             var today = new Date();
-            var IWantToSeeMonth = today.getMonth();
-            calendar.loadCalendarView(IWantToSeeMonth,2013);
+            calendar.loadCalendarView(today.getMonth(),today.getFullYear());
 
             document.getElementById('decrementMonthButton').addEventListener('click',function(){
-                IWantToSeeMonth--;
-                calendar.loadCalendarView(IWantToSeeMonth);
+                if (today.getMonth() != 0){
+                    today.setMonth(today.getMonth()-1);
+                } else {
+                    today.setFullYear(today.getFullYear()-1);
+                    today.setMonth(11);
+                }
+                printlog('requesting date '+today.getMonth()+", "+today.getFullYear())
+
+                calendar.loadCalendarView(today.getMonth(),today.getFullYear());
             });
             document.getElementById('incrementMonthButton').addEventListener('click',function(){
-                IWantToSeeMonth++;
-                calendar.loadCalendarView(IWantToSeeMonth);
+                if (today.getMonth() != 11){
+                    today.setMonth(today.getMonth()+1);
+                } else {
+                    today.setFullYear(today.getFullYear()+1);
+                    today.setMonth(0);
+                }
+                calendar.loadCalendarView(today.getMonth(),today.getFullYear());
             });
         }
     </script>
