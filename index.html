@@ -27,11 +27,13 @@
             color: #ffffff;
         }
         #calendar td.Day {
-            background-color:#efe0a5;
             max-height: 80px;
             overflow: hidden;
             height: 80px;
             font-size: 12px;            
+        }
+        #calendar .this-month {
+            background-color: #efe0a5;
         }
         #calendar .other-month {
             background-color: #777;
@@ -224,7 +226,7 @@
                     var yearMonthDay = weeks[wToCreate][i].split("-"); 
                     var td = document.createElement('td');
                     if (yearMonthDay[1] == (m+1)){
-                        var className = "Day Day-"+dayName[i];
+                        var className = "this-month Day Day-"+dayName[i];
                     } else {
                         var className = "other-month Day Day-"+dayName[i];
                     }
