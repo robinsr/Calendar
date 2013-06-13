@@ -10,11 +10,6 @@
             background: url(bg.jpg) top center no-repeat #545454;
             font-family: Verdana,Tahoma,sans-serif;
         }
-        #calendar caption {
-            font-size: 48px;
-            font-weight: bold;
-            margin-bottom: 24px;  
-        }
         #calendar table {
             border-spacing: 4px;
             width:940px;
@@ -46,6 +41,10 @@
         #calendar .DateHolder {
             font-weight: bold;
         }
+        #calendar .calendarItem {
+            text-transform: capitalize;
+            cursor: pointer;
+        }
         #eventDetails {
             display:inline-block;
             width: 300px;
@@ -65,19 +64,45 @@
             font-style: italic;
             cursor: pointer;
         }
+        #tableCaptionWrap {
+            display: inline-block;
+            width:500px;
+        }
+        #tableCaption {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 24px;
+            margin-top: 0;
+        }
         #buttonControls {
-            width: 300px;
+            text-align: center;
+            width: 600px;
             margin: 0 auto 0 auto;
+        }
+        #buttonControls img {
+            width: 36px;
+            height: 36px;
+            background-image: url('fancybox/fancybox_sprite.png');
+        }
+        #decrementMonthButton{
+            background-position: 0 -36px;
+        }
+        #incrementMonthButton{
+            background-position: 0 -72px;
         }
         </style>
     </head>
     <body>
+        <div id="buttonControls">
+            <img src="fancybox/blank.gif" id="decrementMonthButton" />
+            <div id="tableCaptionWrap">
+                <p id="tableCaption"></p>
+            </div>
+            <img src="fancybox/blank.gif" id="incrementMonthButton" />
+        </div>
         <div id="calendar"></div>
         <div id="eventDetails" style="display:none;"></div>
-        <div id="buttonControls">
-            <button type="button" id="decrementMonthButton">Decrement Month</button>
-            <button type="button" id="incrementMonthButton">Increment Month</button>
-        </div>
+
 
     <script>
 
@@ -228,11 +253,12 @@
                         for (k=0;k<items[yearQ][monthQ].length;k++){
                             var itemDate = items[yearQ][monthQ][k].date.split("/");
                             if (itemDate[1] == yearMonthDay[2] && itemDate[0] == yearMonthDay[1]){
-                                var itemDiv = document.createElement('li');
-                                itemDiv.appendChild(document.createTextNode(items[yearQ][monthQ][k].title))
+                                var itemLi = document.createElement('li');
+                                itemLi.className = "calendarItem";
+                                itemLi.appendChild(document.createTextNode(items[yearQ][monthQ][k].title))
                                 var functionString = "calendar.getEventDeatils("+items[yearQ][monthQ][k].eventId+")";
-                                itemDiv.setAttribute('onclick',functionString);
-                                td.appendChild(itemDiv);
+                                itemLi.setAttribute('onclick',functionString);
+                                td.appendChild(itemLi);
                             }
                         }
                     }
@@ -274,9 +300,9 @@
 
                     var table = document.createElement('table');
 
-                    var caption = document.createElement('caption');
-                    caption.appendChild(document.createTextNode(monthNames[monthToCreate]+", "+yearToCreate));
-                    table.appendChild(caption);
+                    var caption = document.getElementById('tableCaption');
+                    caption.innerHTML = monthNames[monthToCreate]+", "+yearToCreate;
+                    
 
                     var tr = document.createElement('tr');
                     for (i=0;i<7;i++){
