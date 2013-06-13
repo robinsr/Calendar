@@ -6,9 +6,30 @@
         <script type="text/javascript" src="fancybox/jquery.fancybox.js"></script>
         <link rel="stylesheet" href="fancybox/jquery.fancybox.css" type="text/css" media="screen" />
         <style type="text/css">
+        html {
+            height: 100%;
+        }
         body {
+            height: 100%;
             background: url(bg.jpg) top center no-repeat #545454;
             font-family: Verdana,Tahoma,sans-serif;
+        }
+        #wrap {
+            height: 100%;
+        }
+        #box {
+            position: relative;;
+            bottom:0;
+            height:40px;
+        }
+        #footer {
+            height:40px;
+            position: relative;
+            bottom: 40px;
+            text-align: center;
+        }
+        #footer a {
+            color: #fff;
         }
         #calendar table {
             border-spacing: 4px;
@@ -93,16 +114,23 @@
         </style>
     </head>
     <body>
-        <div id="buttonControls">
-            <img src="fancybox/blank.gif" id="decrementMonthButton" />
-            <div id="tableCaptionWrap">
-                <p id="tableCaption"></p>
+        <div id="wrap">
+            <div id="buttonControls">
+                <img src="fancybox/blank.gif" id="decrementMonthButton" />
+                <div id="tableCaptionWrap">
+                    <p id="tableCaption"></p>
+                </div>
+                <img src="fancybox/blank.gif" id="incrementMonthButton" />
             </div>
-            <img src="fancybox/blank.gif" id="incrementMonthButton" />
-        </div>
-        <div id="calendar"></div>
-        <div id="eventDetails" style="display:none;"></div>
+            <div id="calendar"></div>
+            <div id="eventDetails" style="display:none;"></div>
 
+            <dix id="box"></dix>
+            </div>
+            <div id="footer">
+                <a href="http://demos.ethernetbucket.com">Back to Demos</a>
+                <a href="javascript:;" id="aboutButton">About</a>
+            </div>
 
     <script>
             // gets day of the year ie 1-365
@@ -373,7 +401,25 @@
         })();
         
          window.onload = function(){
+            $("#aboutButton").click(function(){
+                var elem = document.getElementById('eventDetails');
+                elem.innerHTML = "";
+                var newHTML = "<p class='eventDetailsItem'>About: </p><br />";
+                newHTML += "Built for a prospective client who needed a way to easily update a calendar of events on their website. The app loads a CSV file (made in Excel and easily updateable), parses the contents, and then plots the items on the calendar. Visitors can click through each month to see scheduled events, or click on events to trigger a lighbox-like modal with the event's details.";
+                newHTML += "<div class='closeModal'><p>click here to close</p></div>"; 
+                elem.innerHTML = newHTML;
+                $.fancybox({
+                    content: $('#eventDetails'),
+                    modal: true,
+                    hideOnContentClick: true,
+                    showCloseButton: true
+                });
 
+                elem.addEventListener('click',function(){
+                    $.fancybox.close();
+                })
+            });
+            
             $.ajax({
                 url: 'data.csv',
                 type: 'get',
