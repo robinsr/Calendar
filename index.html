@@ -386,7 +386,7 @@
                     var today = new Date();
                     calendar.loadCalendarView(today.getMonth(),today.getFullYear());
 
-                    document.getElementById('decrementMonthButton').addEventListener('click',function(){
+                    $('#decrementMonthButton').click(function(){
                         if (today.getMonth() != 0){
                             today.setMonth(today.getMonth()-1);
                         } else {
@@ -395,7 +395,7 @@
                         }
                         calendar.loadCalendarView(today.getMonth(),today.getFullYear());
                     });
-                    document.getElementById('incrementMonthButton').addEventListener('click',function(){
+                    $('#incrementMonthButton').click(function(){
                         if (today.getMonth() != 11){
                             today.setMonth(today.getMonth()+1);
                         } else {
