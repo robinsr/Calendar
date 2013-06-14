@@ -11,9 +11,10 @@
     Copyright 2013
 
 -->
+
     <head>
         <title>CSV to Calendar</title>
-        <script src="jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="jquery-1.8.3.min.js"></script>
         <script type="text/javascript" src="fancybox/jquery.fancybox.js"></script>
         <link rel="stylesheet" href="fancybox/jquery.fancybox.css" type="text/css" media="screen" />
         <style type="text/css">
@@ -386,27 +387,16 @@
                                 items[thisItemsYear][thisItemsMonth] = [];
                             }
 
-
-
-                            thisObject[headers[0]] = thisLine[0];
-                            thisObject[headers[1]] = thisLine[1];
-                            thisObject[headers[2]] = thisLine[2];
-                            thisObject[headers[3]] = thisLine[3];
                             thisObject.eventId = Math.floor((Math.random()*100000000000)+1);
-
                             itemsById[thisObject.eventId] = {};
 
-                            itemsById[thisObject.eventId][headers[0]] = thisLine[0];
-                            itemsById[thisObject.eventId][headers[1]] = thisLine[1];
-                            itemsById[thisObject.eventId][headers[2]] = thisLine[2];
-                            itemsById[thisObject.eventId][headers[3]] = thisLine[3];
-
-
+                            for (j=0;j<thisLine.length;j++){
+                                thisObject[headers[j]] = thisLine[j];
+                                itemsById[thisObject.eventId][headers[j]] = thisLine[j];
+                            }
+                            
                             items[thisItemsYear][thisItemsMonth].push(thisObject);
-
                         }
-                        
-                        
                     }
                 }    
             }
