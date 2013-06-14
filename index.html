@@ -316,9 +316,9 @@
                         showCloseButton: true
                     });
 
-                    elem.addEventListener('click',function(){
+                    $("#eventDetails").click(function(){
                         $.fancybox.close();
-                    })
+                    });
                 },
                 loadCalendarView : function(monthToCreate,yearToCreate){
                     document.getElementById('calendar').innerHTML = '';
@@ -417,9 +417,9 @@
                     showCloseButton: true
                 });
 
-                elem.addEventListener('click',function(){
+                $("#eventDetails").click(function(){
                     $.fancybox.close();
-                })
+                });
             });
             
             $.ajax({
