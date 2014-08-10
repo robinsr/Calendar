@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 
-<!-- 
+<!--
 
     Developer: Ryan Robinson
     Date: 6/14/13
@@ -64,7 +64,7 @@
             max-height: 80px;
             overflow: hidden;
             height: 80px;
-            font-size: 12px;            
+            font-size: 12px;
         }
         #calendar .this-month {
             background-color: #efe0a5;
@@ -156,18 +156,18 @@
         var calendar = (function(){
             var items = {};
             var itemsById = {};
-            var monthNames = [ 
-                "January", 
-                "February", 
-                "March", 
-                "April", 
-                "May", 
+            var monthNames = [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
                 "June",
-                "July", 
-                "August", 
-                "September", 
-                "October", 
-                "November", 
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
                 "December" ];
 
             function getJanFirstDOY(y){
@@ -237,19 +237,6 @@
                 }
             }
 
-            function displayWeeks(){
-                for (f=0;f<weeksInEachMonth.length;f++){
-                    document.body.appendChild(document.createTextNode(monthNames[f]+":  "));
-                    document.body.appendChild(document.createTextNode(weeksInEachMonth[f]));
-                    document.body.appendChild(document.createElement('br'));
-                }
-                for (f=0;f<weeks.length;f++){
-                    document.body.appendChild(document.createTextNode("week number: "+f+":  "));
-                    document.body.appendChild(document.createTextNode(weeks[f]));
-                    document.body.appendChild(document.createElement('br'));
-                }
-            }
-            
             var tableElement = document.getElementById('calendar');
 
             var dayName = {
@@ -264,7 +251,7 @@
             makeWeekRowAndAddItems = function(wToCreate,m,y){
                 var tr = document.createElement('tr');
                 for (i=0;i<7;i++){
-                    var yearMonthDay = weeks[wToCreate][i].split("-"); 
+                    var yearMonthDay = weeks[wToCreate][i].split("-");
                     var td = document.createElement('td');
                     if (yearMonthDay[1] == (m+1)){
                         var className = "this-month Day Day-"+dayName[i];
@@ -325,7 +312,7 @@
                     if ((typeof monthToCreate != 'number') || (typeof yearToCreate != 'number')){
                         return
                     }
-                    constructWeeksObject(yearToCreate);  
+                    constructWeeksObject(yearToCreate);
 
                     var weeksToCreate = weeksInEachMonth[monthToCreate]
 
@@ -333,7 +320,7 @@
 
                     var caption = document.getElementById('tableCaption');
                     caption.innerHTML = monthNames[monthToCreate]+", "+yearToCreate;
-                    
+
 
                     var tr = document.createElement('tr');
                     for (i=0;i<7;i++){
@@ -348,11 +335,11 @@
                     if (weeksToCreate.length < 6){
                         weeksToCreate.push(weeksToCreate[weeksToCreate.length-1]+1);
                     }
-                    
+
                     for (j=0;j<weeksToCreate.length;j++){
                         table.appendChild(makeWeekRowAndAddItems(weeksToCreate[j],monthToCreate,yearToCreate));
                     }
-                    
+
                     tableElement.appendChild(table);
                 },
                 parseCSV : function(err,stat,data){
@@ -394,21 +381,21 @@
                                 thisObject[headers[j]] = thisLine[j];
                                 itemsById[thisObject.eventId][headers[j]] = thisLine[j];
                             }
-                            
+
                             items[thisItemsYear][thisItemsMonth].push(thisObject);
                         }
                     }
-                }    
+                }
             }
         })();
-        
+
          window.onload = function(){
             $("#aboutButton").click(function(){
                 var elem = document.getElementById('eventDetails');
                 elem.innerHTML = "";
                 var newHTML = "<p class='eventDetailsItem'>About: </p><br />";
                 newHTML += "Built for a prospective client who needed a way to easily update a calendar of events on their website. The app loads a CSV file (made in Excel and easily updateable), parses the contents, and then plots the items on the calendar. Visitors can click through each month to see scheduled events, or click on events to trigger a lighbox-like modal with the event's details.<br /><a href='data.txt'>CSV events file</a>";
-                newHTML += "<div class='closeModal'><p>click here to close</p></div>"; 
+                newHTML += "<div class='closeModal'><p>click here to close</p></div>";
                 elem.innerHTML = newHTML;
                 $.fancybox({
                     content: $('#eventDetails'),
@@ -421,7 +408,7 @@
                     $.fancybox.close();
                 });
             });
-            
+
             $.ajax({
                 url: 'data.csv',
                 type: 'get',
@@ -436,7 +423,7 @@
 
                     $('#decrementMonthButton').click(function(){
                         if (today.getMonth() != 0){
-                            today.setMonth(today.getMonth()-1);
+                            ˜.setMonth(today.getMonth()-1);
                         } else {
                             today.setFullYear(today.getFullYear()-1);
                             today.setMonth(11);
