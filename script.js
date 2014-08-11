@@ -1,9 +1,12 @@
 Date.prototype.getDOY = function() {
-    var onejan = new Date(this.getFullYear(),0,1);
-    return Math.ceil((this - onejan) / 86400000);
+  var onejan = new Date(this.getFullYear(),0,1);
+  return Math.ceil((this - onejan) / 86400000);
 }
 
 function Calendar (calendarSelector, headerSelector) {
+  this.currentMonth = 0;
+  this.currentYear = 0;
+
   var monthNames = [
       "January",
       "February",
@@ -21,39 +24,89 @@ function Calendar (calendarSelector, headerSelector) {
 
   this._events = [];
 
-  this.addEvent = function(ev){
+  this.addEvent = function (ev) {
     this._events.push(ev);
   }
 
-  this.addEventFromJSON = function(ev){
+  this.addEventFromJSON = function (ev) {
     this._events.push(new EventItem(ev));
   }
 
-  this.getHtml = function (monthNum, yearNum) {
+  this.removeEventFromJSON = function (a) {
+    var eventToRemove = this._events.filter(function (b) {
+      return a.date == b.date && a.description == b.description
+      && a.title == b.title && a.time == b.time
+    });
+    this._events.splice(this._events.indexOf(eventToRemove[0]),1);
+  }
+
+  this.attachEvents = function (elem) {
+    var self = this;
+
+    elem.addEventListener("dragover", function (e) {
+      e.preventDefault();
+    });
+
+    elem.addEventListener("dragenter", function (e) {
+      e.preventDefault();
+    });
+
+    elem.addEventListener("drop", function (e) {
+      var newItem = JSON.parse(e.dataTransfer.getData("Calendar"));
+      self.removeEventFromJSON(newItem);
+      var newDate = e.target.getAttribute("data-calendar");
+      newItem.date = newDate;
+      self.addEventFromJSON(newItem);
+      self.render(self.currentMonth, self.currentYear);
+    });
+
+    return elem
+  }
+
+  this.getElements = function (monthNum, yearNum) {
+    var self = this;
+
     var relevantEvents = this._events.filter(function (evt) {
       return evt.year == yearNum && evt.month == monthNum;
     });
 
-    var headerHtml = "<table><tr>"
-      + "<td class=\"table-header\">Sunday</td>"
-      + "<td class=\"table-header\">Monday</td>"
-      + "<td class=\"table-header\">Tuesday</td>"
-      + "<td class=\"table-header\">Wednesday</td>"
-      + "<td class=\"table-header\">Thursday</td>"
-      + "<td class=\"table-header\">Friday</td>"
-      + "<td class=\"table-header\">Saturday</td>"
-      + "</tr>"
+    var dayNames = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+    ]
 
-    var html = new Month(monthNum, yearNum, relevantEvents).getHTML();
+    var table = document.createElement("table");
+    var tr = document.createElement("tr");
 
-    var closingHtml = "</table>";
+    for (var i = 0; i < dayNames.length; i++) {
+      var td = document.createElement("td");
+      td.className = "table-header";
+      td.appendChild(document.createTextNode(dayNames[i]))
+    }
 
-    return headerHtml + html + closingHtml;
+    table.appendChild(tr);
+
+    var rows = new Month(monthNum, yearNum, relevantEvents).getElements();
+
+    for (var i = 0; i < rows.length; i++) {
+      table.appendChild(rows[i])
+    }
+
+    table = this.attachEvents(table);
+
+    return table
   }
 
   this.render = function (monthNum, yearNum){
-    $(calendarSelector).empty().append(this.getHtml(monthNum, yearNum));
-    $(headerSelector).empty().text(monthNames[monthNum] + ", " + yearNum)
+    $(calendarSelector).empty().append(this.getElements(monthNum, yearNum));
+    $(headerSelector).empty().text(monthNames[monthNum] + ", " + yearNum);
+    this.currentMonth = monthNum;
+    this.currentYear = yearNum;
   }
 
   return this;
@@ -122,13 +175,14 @@ function Month (monthNum, yearNum, eventItems) {
   this.weeksInThisMonth = Math.floor(this.days.length / 7);
 
   /**
-   * getHTML()
+   * getElements()
    * returns <tr> elements with appropriate content
    */
-  this.getHTML = function () {
-    var html = "";
+
+  this.getElements = function () {
+    var elems = [];
     for (var i = 0; i < this.weeksInThisMonth; i++) {
-      html += "<tr>";
+      var tr = document.createElement("tr");
 
       var startDate = i * 7;
       var endDate = startDate + 7;
@@ -136,26 +190,28 @@ function Month (monthNum, yearNum, eventItems) {
       for (var j = startDate; j < endDate; j++) {
         var currentDay = this.days[j];
         currentDay.getItems(eventItems);
-        html += currentDay.getHTML(monthNum)
+        tr.appendChild(currentDay.getElements(monthNum))
       }
-      html += "</tr>"
+
+      elems.push(tr);
     }
-    return html;
+
+    return elems;
   }
 
   return this;
 }
 
 function Day (opt) {
-  var dayNames = {
-      0:'Sunday',
-      1:'Monday',
-      2:'Tuesday',
-      3:'Wednesday',
-      4:'Thursday',
-      5:'Friday',
-      6:'Saturday'
-  };
+  var dayNames = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+  ];
 
   this.day = opt.day; // 1-31
   this.month = opt.month; // 0-11
@@ -200,7 +256,7 @@ function Day (opt) {
    * returns a date string YYYY-MM-DD with 1-indexed months (ie january = 1)
    */
   this.visibleDate = function () {
-    return this.year + "-" + (this.month + 1) + "-" + this.day;
+    return (this.month + 1) + "/" + this.day + "/" + this.year;
   }
 
   /**
@@ -212,34 +268,27 @@ function Day (opt) {
   }
 
   /**
-   * getHTML
-   * Generates a <td> with appropriate content
-   * @param monthNum, the number month being generated
+   * getElements
+   * retuns td element with date holder div and li of items
    */
-  this.getHTML = function (monthNum) {
+  this.getElements = function (monthNum) {
     monthNum = monthNum || this.month;
+    var elem = document.createElement("td");
+        elem.classList.add(monthNum == this.month ? "this-month" : "other-month");
+        elem.classList.add("Day");
+        elem.classList.add("Day-"+this.dayOfWeekName());
+        elem.setAttribute("data-calendar", this.visibleDate());
 
-    var monthCssClass = monthNum == this.month ? "this-month" : "other-month";
+    var dateHolder = document.createElement("div");
+        dateHolder.appendChild(document.createTextNode(this.day))
 
-    var html = "<td class=\""
-      + monthCssClass
-      + " Day Day-"
-      + this.dayOfWeekName()
-      + "\" "
-      + "data-calendar=\""
-      + this.dataDate()
-      + "\">"
-      + "<div class=\"DateHolder\">"
-      + this.day
-      + "</div>";
+    elem.appendChild(dateHolder);
 
-    for (var i = 0; i < this.daysItems.length; i++) {
-      html += this.daysItems[i].getHTML();
-    }
+   for (var i = 0; i < this.daysItems.length; i++) {
+     elem.appendChild(this.daysItems[i].getElements());
+   }
 
-    html +="</td>";
-
-    return html
+   return elem;
   }
 
   return this;
@@ -257,17 +306,53 @@ function EventItem (opt) {
   this.day = parseInt(dateSplit[1]);
   this.year = parseInt(dateSplit[2]);
 
-  this.showEvent = function (){ return }
-  this.hideEvent = function (){ return }
+  this.showEvent = function (){
+      var elem = document.getElementById('eventDetails');
+      elem.innerHTML = "";
+      var newHTML = "";
+
+      var displayProperties = ["title","date","time","description"]
+      for (var i = 0; i < displayProperties.length; i++) {
+        newHTML += "<p class='eventDetailsItem'>"+displayProperties[i]+":</p> "
+        + this[displayProperties[i]]+"<br />";
+      }
+      elem.innerHTML = newHTML;
+      elem.innerHTML += "<div class='closeModal'><p>click here to close</p></div>";
+      $.fancybox({
+        content: $('#eventDetails'),
+        modal: true,
+        hideOnContentClick: true,
+        showCloseButton: true
+      });
+
+      $("#eventDetails").click(function(){
+        $.fancybox.close();
+      });
+  }
 
   /**
-   * getHTML
-   * Generates <li> with appropriate content
+   * getElements
+   * Creates <li> element
    */
-  this.getHTML = function () {
-    return "<li class=\"calendarItem\" onclick=\"calendar.getEventDeatils(34799080133)\">"
-    + this.title
-    + "</li>"
+  this.getElements = function () {
+    var self = this;
+
+    var li = document.createElement("li");
+    li.className = "calendarItem"
+    li.innerText = this.title;
+    li.setAttribute("draggable", true);
+
+    //TODO: support element.attachEvent();
+    li.addEventListener("click", function (e) {
+      self.showEvent();
+    });
+
+    li.addEventListener("dragstart", function (e) {
+      e.dataTransfer.setData("calendar", JSON.stringify(self));
+    });
+
+
+    return li
   }
 
   return this;

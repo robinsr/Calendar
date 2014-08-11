@@ -47,4 +47,14 @@ describe("Month", function () {
       });
     });
   });
+
+  describe("#getElements()", function () {
+    it("Should generate an array of tr, with td, and li elements", function () {
+      m = new Month(0,2014);
+      var elems = m.getElements();
+      expect(elems).to.stasify(function () {
+        return true;
+      })
+    })
+  })
 });

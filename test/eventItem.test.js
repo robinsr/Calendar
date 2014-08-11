@@ -21,9 +21,16 @@ describe("EventItem", function () {
       expect(ev.day).to.equal(1);
     });
   });
-  describe("#getHTML()",function () {
-    it("Should return html",function(){
-      expect(ev.getHTML()).to.equal(TEST_HTML)
+
+
+  describe("#getElements()", function () {
+    it("Shouls return a li DOM element", function () {
+      var li = ev.getElements();
+      expect(li).to.have.property("nodeName","LI");
+
+      // $(li).trigger("click");
+      //
+      // expect(li.classList).to.include.members(["calendarItem","clicked"]);
     })
   })
 });

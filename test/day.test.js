@@ -75,15 +75,15 @@ describe("Day", function () {
     })
   })
 
-  describe("#getHTML()", function () {
+  describe("#getElements()", function () {
     context("Generating this month", function () {
-      it("Should generate HTML to match the expected", function () {
-        expect(day.getHTML(0)).to.equal(EXPECTED_HTML_THIS_MONTH);
+      it("Should generate DOM to match the expected", function () {
+        expect(day.getElements(0)).to.have.property("nodeName", "TD")
       });
     });
     context("Generating other month", function () {
-      it("Should generate HTML to match the expected", function () {
-        expect(day.getHTML(1)).to.equal(EXPECTED_HTML_OTHER_MONTH);
+      it("Should generate DOM to match the expected", function () {
+        expect(day.getElements(0)).to.have.property("nodeName", "TD")
       });
     })
   })
