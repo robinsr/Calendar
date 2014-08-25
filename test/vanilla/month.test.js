@@ -52,9 +52,7 @@ describe("Month", function () {
     it("Should generate an array of tr, with td, and li elements", function () {
       m = new Month(0,2014);
       var elems = m.getElements();
-      expect(elems).to.stasify(function () {
-        return true;
-      })
+      expect(elems).to.have.length(5)
     })
   })
 });

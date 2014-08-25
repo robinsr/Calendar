@@ -14,10 +14,10 @@
 
     <head>
         <title>CSV to Calendar</title>
-        <script type="text/javascript" src="jquery-1.8.3.min.js"></script>
-        <script type="text/javascript" src="fancybox/jquery.fancybox.js"></script>
+        <script type="text/javascript" src="../common/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="../common/fancybox/jquery.fancybox.js"></script>
         <script src="script.js"></script>
-        <link rel="stylesheet" href="fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="../common/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
         <style type="text/css">
         * {
           box-sizing: border-box;
@@ -28,7 +28,7 @@
         body {
             margin:0;
             height: 100%;
-            background: url(bg.jpg) top center no-repeat #545454;
+            background: url('../assets/bg.jpg') top center no-repeat #545454;
             font-family: Verdana,Tahoma,sans-serif;
         }
         #wrap {
@@ -120,7 +120,7 @@
         #buttonControls img {
             width: 36px;
             height: 36px;
-            background-image: url('fancybox/fancybox_sprite.png');
+            background-image: url('../common/fancybox/fancybox_sprite.png');
         }
         #decrementMonthButton{
             background-position: 0 -36px;
@@ -172,7 +172,7 @@
             });
 
             $.ajax({
-                url: 'items.json',
+                url: '../common/items.json',
                 type: 'get',
                 error: function(data){
                     calendar.parseCSV(true);

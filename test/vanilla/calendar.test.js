@@ -33,7 +33,7 @@ describe("Calendar", function () {
 
   describe("#getHtml()", function () {
     it("Should render table rows for Jan 2014", function () {
-      $("#fixtures").append(c.getHtml(0,2014));
+      $("#fixtures").append(c.getElements(0,2014));
       expect($("td.Day").length).to.equal(35);
     });
   });
