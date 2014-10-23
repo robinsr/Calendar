@@ -1,0 +1,109 @@
+* {
+  box-sizing: border-box;
+}
+html {
+    height: 100%;
+}
+body {
+    margin:0;
+    height: 100%;
+    background: url('../assets/bg.jpg') top center no-repeat #545454;
+    font-family: Verdana,Tahoma,sans-serif;
+}
+#wrap {
+    height: 100%;
+}
+#box {
+    position: relative;;
+    bottom:0;
+    height:40px;
+}
+#footer {
+    height:40px;
+    position: relative;
+    bottom: 40px;
+    text-align: center;
+}
+#footer a {
+    color: #fff;
+}
+#calendar table {
+    border-spacing: 4px;
+    width:940px;
+    display:block;
+    margin:0 auto 0 auto;
+}
+#calendar td {
+    border-radius: 3px;
+    border-bottom-right-radius: 0px;
+    vertical-align: top;
+    width:134px;
+}
+#calendar td.table-header {
+    text-align: center;
+    color: #ffffff;
+}
+#calendar td.Day {
+    max-height: 80px;
+    overflow: hidden;
+    height: 80px;
+    font-size: 12px;
+}
+#calendar .this-month {
+    background-color: #efe0a5;
+}
+#calendar .other-month {
+    background-color: #777;
+}
+#calendar .DateHolder {
+    font-weight: bold;
+}
+#calendar .calendarItem {
+    text-transform: capitalize;
+    cursor: pointer;
+}
+#eventDetails {
+    display:inline-block;
+    width: 300px;
+    vertical-align: top;
+}
+#eventDetails .eventDetailsItem {
+    font-weight: bold;
+}
+#eventDetails .eventDetailsItem:first-letter {
+    text-transform: uppercase;
+}
+#eventDetails .closeModal {
+    text-align: center;
+}
+#eventDetails .closeModal p {
+    font-size: 11px;
+    font-style: italic;
+    cursor: pointer;
+}
+#tableCaptionWrap {
+    display: inline-block;
+    width:500px;
+}
+#tableCaption {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 24px;
+    margin-top: 0;
+}
+#buttonControls {
+    text-align: center;
+    width: 600px;
+    margin: 0 auto 0 auto;
+}
+#buttonControls img {
+    width: 36px;
+    height: 36px;
+    background-image: url('../common/fancybox/fancybox_sprite.png');
+}
+#decrementMonthButton{
+    background-position: 0 -36px;
+}
+#incrementMonthButton{
+    background-position: 0 -72px;
+}

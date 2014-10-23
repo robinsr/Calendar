@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CSV to Calendar</title>
+  <script type="text/javascript" src="../common/jquery-1.8.3.min.js"></script>
+  <script type="text/javascript" src="../common/fancybox/jquery.fancybox.js"></script>
+  <link rel="stylesheet" href="../common/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="../common/style.css" type="text/css" media="screen" />
+</head>
+<body>
+  <div id="wrap">
+    <div id="buttonControls">
+      <img src="../common/fancybox/blank.gif" id="decrementMonthButton" />
+      <div id="tableCaptionWrap">
+        <p id="tableCaption"></p>
+      </div>
+      <img src="../common/fancybox/blank.gif" id="incrementMonthButton" />
+    </div>
+    <div id="calendar">
+      <table>
+        <tr>
+          <td class="table-header">Sunday</td>
+          <td class="table-header">Monday</td>
+          <td class="table-header">Tuesday</td>
+          <td class="table-header">Wednesday</td>
+          <td class="table-header">Thursday</td>
+          <td class="table-header">Friday</td>
+          <td class="table-header">Saturday</td>
+        </tr>
+        <tr data-bind="foreach: ">
+          <td class="other-month Day Day-Sunday" data-calendar="2014-7-27">
+          <div class="DateHolder" data-bind="text: day.number">27</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div id="eventDetails" style="display:none;"></div>
+
+    <dix id="box"></dix>
+  </div>
+  <div id="footer">
+    <a href="http://demos.ethernetbucket.com">Back to Demos</a>
+    <a href="javascript:;" id="aboutButton">About</a>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+  $(document).ready(function(){
+    var vm = ko.applyBindings(new appViewModel());
+  })
+  </script>
+</body>
+</html>
