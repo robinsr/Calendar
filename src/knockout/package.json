@@ -12,8 +12,9 @@
   "author": "robinsr",
   "license": "MIT",
   "dependencies": {
+    "bower": "^1.3.12",
     "grunt": "^0.4.5",
-    "grunt-browserify": "^3.1.0",
+    "grunt-bower-requirejs": "^1.1.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-jsbeautifier": "^0.2.7"
   },

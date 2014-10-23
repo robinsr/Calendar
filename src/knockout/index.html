@@ -2,8 +2,6 @@
 <html>
 <head>
   <title>CSV to Calendar</title>
-  <script type="text/javascript" src="../common/jquery-1.8.3.min.js"></script>
-  <script type="text/javascript" src="../common/fancybox/jquery.fancybox.js"></script>
   <link rel="stylesheet" href="../common/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
   <link rel="stylesheet" href="../common/style.css" type="text/css" media="screen" />
 </head>
@@ -27,11 +25,13 @@
           <td class="table-header">Friday</td>
           <td class="table-header">Saturday</td>
         </tr>
-        <tr data-bind="foreach: ">
-          <td class="other-month Day Day-Sunday" data-calendar="2014-7-27">
-          <div class="DateHolder" data-bind="text: day.number">27</div>
-          </td>
-        </tr>
+        <tr data-bind="template: { foreach: week1, name: 'day-template' }"></tr>
+        <tr data-bind="template: { foreach: week2, name: 'day-template' }"></tr>
+        <tr data-bind="template: { foreach: week3, name: 'day-template' }"></tr>
+        <tr data-bind="template: { foreach: week4, name: 'day-template' }"></tr>
+        <tr data-bind="template: { foreach: week5, name: 'day-template' }"></tr>
+        <tr data-bind="template: { foreach: week6, name: 'day-template' }"></tr>
+
       </table>
     </div>
     <div id="eventDetails" style="display:none;"></div>
@@ -43,11 +43,15 @@
     <a href="javascript:;" id="aboutButton">About</a>
   </div>
 
-  <script src="script.js"></script>
-  <script>
-  $(document).ready(function(){
-    var vm = ko.applyBindings(new appViewModel());
-  })
+
+  <!-- Templates -->
+  <script type="text/html" id="day-template">
+    <td class="other-month Day Day-Sunday" data-calendar="">
+      <div class="DateHolder" data-bind="text: displayDate"></div>
+    </td>
   </script>
+  <!-- end:Templates -->
+
+  <script data-main="src/require-config.js" src="bower_components/requirejs/require.js"></script>
 </body>
 </html>
