@@ -1,8 +1,19 @@
 'use strict';
 
-define(['viewmodels/day'], function (Day) {
+define([
+  'knockout',
+  'viewmodels/day',
+  'models/day'
+],
+function (ko, DayViewModel, DayModel) {
+  Date.prototype.getDOY = function() {
+    var onejan = new Date(this.getFullYear(),0,1);
+    return Math.ceil((this - onejan) / 86400000);
+  }
+
   return function Month (monthNum, yearNum, eventItems) {
-      var monthNames = [
+    
+    var monthNames = [
       "January",
       "February",
       "March",
@@ -18,6 +29,8 @@ define(['viewmodels/day'], function (Day) {
     ];
 
     this.monthName = monthNames[monthNum];
+
+    this.yearNum = yearNum;
 
     this.days = [];
 
@@ -58,32 +71,32 @@ define(['viewmodels/day'], function (Day) {
 
     // add preceding days to days array (using splice)
     for (var i = 0; i < this.precedingDays; i++) {
-      this.days.splice(0, 0, new Day({
+      this.days.splice(0, 0, new DayViewModel(new DayModel({
         year: this.precedingMonth[1],
         month: this.precedingMonth[0],
         day: daysInEachMonth[this.precedingMonth[0]] - i,
         inCurrentMonth: false
-      }));
+      })));
     }
 
     // add this months days to the days array (using normal push)
     for (var i = 0; i < this.daysInMonth; i++) {
-      this.days.push(new Day({
+      this.days.push(new DayViewModel(new DayModel({
         year: yearNum,
         month: monthNum,
         day: i + 1,
         inCurrentMonth: true
-      }));
+      })));
     }
 
     // add trailing monds days to the days array
     for (var i = 0; i < this.trailingDays; i++) {
-      this.days.push(new Day({
+      this.days.push(new DayViewModel(new DayModel({
         year: this.trailingMonth[1],
         month: this.trailingMonth[0],
         day: i + 1,
         inCurrentMonth: false
-      }));
+      })));
     }
 
 

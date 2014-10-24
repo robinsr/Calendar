@@ -8,11 +8,16 @@
 <body>
   <div id="wrap">
     <div id="buttonControls">
-      <img src="../common/fancybox/blank.gif" id="decrementMonthButton" />
+      <img src="../common/fancybox/blank.gif" id="decrementMonthButton" 
+        data-bind="click: decMonth" />
       <div id="tableCaptionWrap">
-        <p id="tableCaption"></p>
+        <p id="tableCaption">
+          <span data-bind="text: monthVM().monthName"></span>,
+          <span data-bind="text: monthVM().yearNum"></span>
+        </p>
       </div>
-      <img src="../common/fancybox/blank.gif" id="incrementMonthButton" />
+      <img src="../common/fancybox/blank.gif" id="incrementMonthButton" 
+        data-bind="click: incMonth" />
     </div>
     <div id="calendar">
       <table>
@@ -46,7 +51,10 @@
 
   <!-- Templates -->
   <script type="text/html" id="day-template">
-    <td class="other-month Day Day-Sunday" data-calendar="">
+    <td class="Day" data-bind="css: {
+      'other-month': !inCurrentMonth(),
+      'this-month': inCurrentMonth()
+      }">
       <div class="DateHolder" data-bind="text: displayDate"></div>
     </td>
   </script>
