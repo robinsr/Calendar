@@ -9,18 +9,14 @@ module.exports = function (grunt) {
     },
     watch: {
       scripts: {
-        files: ['src/**/*.js'],
-        tasks: ['wiredep','browserify','jsbeautifier']
+        files: ['bower_components/'],
+        tasks: ['bower']
       }
-    },
-    "jsbeautifier" : {
-      files : ['bundle-dist/site.js'],
-      options : {}
     }
   });
 
   grunt.loadNpmTasks('grunt-bower-requirejs');
-  grunt.loadNpmTasks('grunt-jsbeautifier');
+  grunt.loadNpmTasks('grunt-contrib-watch')
 
-  grunt.registerTask('default', ['bower', 'jsbeautifier']);
+  grunt.registerTask('default', ['bower']);
 }

@@ -48,14 +48,39 @@
     <a href="javascript:;" id="aboutButton">About</a>
   </div>
 
+  <!-- Modal -->
+
+  <div class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto;">
+    <div class="fancybox-wrap fancybox-desktop fancybox-type-html fancybox-opened" tabindex="-1" style="width: 330px; height: auto; position: absolute; top: 282px; left: 522px; opacity: 1; overflow: visible;">
+      <div class="fancybox-skin" style="padding: 15px; width: auto; height: auto;">
+        <div class="fancybox-outer">
+          <div class="fancybox-inner" style="overflow: auto; width: 300px; height: auto;">
+            <div id="eventDetails">
+            <p class="eventDetailsItem">title:</p><span data-bind="text: $root.selectedItem().title"></span><br>
+            <p class="eventDetailsItem">date:</p><span data-bind="text: $root.selectedItem().date"></span><br>
+            <p class="eventDetailsItem">time:</p> <span data-bind="text: $root.selectedItem().time"></span><br>
+            <p class="eventDetailsItem">description:</p><span data-bind="text: $root.selectedItem().description"></span><br>
+            <div class="closeModal" data-bind="hideItem:$data">
+              <p>click here to close</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- Templates -->
   <script type="text/html" id="day-template">
-    <td class="Day" data-bind="css: {
+    <td class="Day" data-bind="enableDrop: $data,
+     css: {
       'other-month': !inCurrentMonth(),
       'this-month': inCurrentMonth()
       }">
       <div class="DateHolder" data-bind="text: displayDate"></div>
+      <ul data-bind="foreach: $root.getItemsForDay(day())">
+         <li class="calendarItem" data-bind="text: title, showItem: $data, enableDrag: id" draggable="true"></li>
+      </ul>
     </td>
   </script>
   <!-- end:Templates -->

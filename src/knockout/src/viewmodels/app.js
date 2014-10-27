@@ -3,9 +3,14 @@
 define([
   'lodash',
   'knockout',
-  'viewmodels/month'
+  'viewmodels/month',
+  'models/items',
+  'bindings/showItem',
+  'bindings/hideItem',
+  'bindings/enableDrag',
+  'bindings/enableDrop'
 ],
-function (_, ko, monthViewModel) {
+function (_, ko, monthViewModel, itemsModel) {
   function appViewModel () {
     var self = this;
     
@@ -72,8 +77,41 @@ function (_, ko, monthViewModel) {
         self.month(today.getMonth());
         self.year(today.getFullYear());
     };
+
+    self.items = ko.observableArray([]);
+
+    self.thisMonthsItems = ko.computed(function () {
+      var items = self.items();
+      return _.filter(items, function (item) {
+        return item.month == self.month() && item.year == self.year();
+      });
+    });
+
+    self.getItemsForDay = function (day) {
+      if (ko.isObservable(day)) {
+        day = day();
+      }
+      return ko.computed({
+        read: function () {
+          var items = self.thisMonthsItems();
+          return _.filter(items, function (item) {
+            return item.day === day;
+          });
+        }
+      });
+    }
+
+
+    var items = new itemsModel();
+
+    items.get(function (items) {
+      self.items(items);
+    });
+
+    self.selectedItem = ko.observable(false);
+
   }
 
   // Main entry point
-  var vm = ko.applyBindings(new appViewModel());
+  window.vm = ko.applyBindings(new appViewModel());
 })
