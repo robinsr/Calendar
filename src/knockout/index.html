@@ -9,7 +9,7 @@
   <div id="wrap">
     <div id="buttonControls">
       <img src="../common/fancybox/blank.gif" id="decrementMonthButton" 
-        data-bind="click: decMonth" />
+        data-bind="decMonth: today" />
       <div id="tableCaptionWrap">
         <p id="tableCaption">
           <span data-bind="text: monthVM().monthName"></span>,
@@ -17,7 +17,7 @@
         </p>
       </div>
       <img src="../common/fancybox/blank.gif" id="incrementMonthButton" 
-        data-bind="click: incMonth" />
+        data-bind="incMonth: today" />
     </div>
     <div id="calendar">
       <table>
@@ -78,7 +78,7 @@
       'this-month': inCurrentMonth()
       }">
       <div class="DateHolder" data-bind="text: displayDate"></div>
-      <ul data-bind="foreach: $root.getItemsForDay(day())">
+      <ul data-bind="foreach: $root.getItemsForDay(dateString())">
          <li class="calendarItem" data-bind="text: title, showItem: $data, enableDrag: id" draggable="true"></li>
       </ul>
     </td>

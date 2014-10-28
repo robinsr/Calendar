@@ -9,7 +9,8 @@ requirejs.config({
         jquery: '../bower_components/jquery/dist/jquery',
         knockout: '../bower_components/knockout/dist/knockout',
         requirejs: '../bower_components/requirejs/require',
-        lodash: '../bower_components/lodash/dist/lodash.compat'
+        lodash: '../bower_components/lodash/dist/lodash.compat',
+        moment: '../bower_components/moment/moment'
     },
     packages: [
 
