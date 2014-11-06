@@ -2,31 +2,21 @@
 
 module.exports = function (grunt) {
   grunt.initConfig({
-    browserify: {
-      dist: {
-        files: {
-          'dist/site.js': ['src/**/*.js', 'src/**/*.coffee'],
-        },
-        options: {
-          //transform: ['coffeeify']
-        }
+    bower: {
+      task: {
+        rjsConfig: 'src/require-config.js'
       }
     },
     watch: {
       scripts: {
-        files: ['src/**/*.js'],
-        tasks: ['browserify', 'jsbeautifier']
+        files: ['bower_components/'],
+        tasks: ['bower']
       }
-    },
-    "jsbeautifier" : {
-      files : ['bundle-dist/site.js'],
-      options : {}
     }
   });
 
-  grunt.loadNpmTasks('grunt-browserify');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-jsbeautifier');
+  grunt.loadNpmTasks('grunt-bower-requirejs');
+  grunt.loadNpmTasks('grunt-contrib-watch')
 
-  grunt.registerTask('default', ['browserify', 'jsbeautifier']);
+  grunt.registerTask('default', ['bower']);
 }
