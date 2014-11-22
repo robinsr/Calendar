@@ -4,10 +4,16 @@ define([
   'backbone',
   'underscore',
   'jquery',
+  'moment',
+  'pubsub',
   'collections/days',
   'collections/items',
-  'views/day'], 
-function (backbone, _, $, DayList, ItemList, DayView) {
+  'views/monthView',
+  'hbs!templates/month'], 
+function (backbone, _, $, moment, pubsub, DayList, ItemList, MonthView, template) {
+
+  console.log(pubsub)
+
   var AppView = Backbone.View.extend({
     el: $("#wrap"),
 
@@ -17,44 +23,35 @@ function (backbone, _, $, DayList, ItemList, DayView) {
     },
 
     decrementMonth: function () {
-      console.log('dec')
+      this.initialDate.subtract(1, 'month');
+      this.render();
     },
 
     incrementMonth: function () {
-      console.log('inc')
+      this.initialDate.add(1, 'month');
+      this.render();
     },
 
     initialize: function () {
-      
-      var Days = new DayList();
-      this.listenTo(Days, 'all', this.render);
-
-      var Items = new ItemList();
-
-      this.listenTo(Items, 'add', function (val) {
-        console.log(val)
-      });
-      
-      Items.fetch();
+      var _this = this;
+      this.initialDate = moment();
+      this.template = template;
+      this.Days = new DayList();
+      window.pubSub = _.extend({},Backbone.Events);
+      window.pubSub.on('click:item', function (item) {
+        console.log('hello from app!')
+      })
     },
 
     render: function () {
-      var day = new DayView({
-        el: "#calendar",
-        model: {
-          displayDate: "Hi",
-          items: [
-            {
-              title: "there"
-            }
-          ]
-        }
-      })
-      day.render();
+      this.Days.reset();
+      this.Days.generateDays(this.initialDate);
+      var d = new MonthView({ collection: this.Days })
+      this.$("#calendar").html(d.render().el);
+      this.$("#monthName").text(this.initialDate.format("MMMM"));
+      this.$("#yearName").text(this.initialDate.format("YYYY"));
     }
   });
-
-
 
   var app = new AppView();
   app.render();

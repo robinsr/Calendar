@@ -11,14 +11,20 @@ requirejs.config({
         requirejs: '../bower_components/requirejs/require',
         underscore: '../bower_components/lodash/dist/lodash.compat',
         moment: '../bower_components/moment/moment',
-        hbs: '../bower_components/require-handlebars-plugin/hbs'
+        hbs: '../bower_components/require-handlebars-plugin/hbs',
+        lodash: '../bower_components/lodash/dist/lodash.compat',
+        'require-handlebars-plugin': '../bower_components/require-handlebars-plugin/hbs',
+        'text': '../bower_components/requirejs-text/text'
     },
-    hbs: { // optional
-        helpers: true,            // default: true
-        i18n: false,              // default: false
-        templateExtension: 'hbs', // default: 'hbs'
-        partialsUrl: ''           // default: ''
-    }
+    hbs: {
+        helpers: true,
+        i18n: false,
+        templateExtension: 'hbs',
+        partialsUrl: ''
+    },
+    packages: [
+
+    ]
 });
 
 // Start loading the main app file. Put all of
