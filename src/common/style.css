@@ -10,6 +10,15 @@ body {
     background: url('../assets/bg.jpg') top center no-repeat #545454;
     font-family: Verdana,Tahoma,sans-serif;
 }
+.intro-box {
+    width: 400px;
+    margin: 0 auto;
+    margin-top: 100px;
+    background-color: #efe0a5;
+    padding: 74px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,.5);
+}
 #wrap {
     height: 100%;
 }
