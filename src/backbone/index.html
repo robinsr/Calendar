@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calendar - Backbone</title>
+  <link rel="stylesheet" href="../common/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="../common/style.css" type="text/css" media="screen" />
+</head>
+<body>
+
+  <div id="wrap">
+      
+    <div id="buttonControls">
+      <img src="../common/fancybox/blank.gif" id="decrementMonthButton" />
+      <div id="tableCaptionWrap">
+        <p id="tableCaption">
+          <span id="monthName"></span>,
+          <span id="yearName"></span>
+        </p>
+      </div>
+      <img src="../common/fancybox/blank.gif" id="incrementMonthButton" />
+    </div>
+    <div id="calendar"></div>
+    <div id="eventDetails" style="display:none;"></div>
+
+    <dix id="box"></dix>
+  </div>
+  <div id="footer">
+    <a href="http://demos.ethernetbucket.com">Back to Demos</a>
+    <a href="javascript:;" id="aboutButton">About</a>
+  </div>
+  
+  <script data-main="src/require-config.js" src="bower_components/requirejs/require.js"></script>
+
+
+</body>
+</html>

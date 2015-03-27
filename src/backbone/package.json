@@ -1,0 +1,24 @@
+{
+  "name": "Calendar-Backbone",
+  "version": "1.0.0",
+  "description": "Calendar app using backbone",
+  "main": "src/main.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "npm test"
+  },
+  "author": "robinsr",
+  "license": "MIT",
+  "dependencies": {
+    "backbone": "^1.1.2",
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^3.1.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-bower-requirejs": "*",
+    "hbsfy": "^2.2.0",
+    "jquery": "^2.1.1",
+    "lodash": "^2.4.1"
+  }
+}

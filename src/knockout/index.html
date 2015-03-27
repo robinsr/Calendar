@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CSV to Calendar</title>
+  <link rel="stylesheet" href="../common/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="../common/style.css" type="text/css" media="screen" />
+</head>
+<body>
+  <div id="wrap">
+    <div id="buttonControls">
+      <img src="../common/fancybox/blank.gif" id="decrementMonthButton" 
+        data-bind="decMonth: today" />
+      <div id="tableCaptionWrap">
+        <p id="tableCaption">
+          <span data-bind="text: monthVM().monthName"></span>,
+          <span data-bind="text: monthVM().yearNum"></span>
+        </p>
+      </div>
+      <img src="../common/fancybox/blank.gif" id="incrementMonthButton" 
+        data-bind="incMonth: today" />
+    </div>
+    <div id="calendar">
+      <table>
+        <tr>
+          <td class="table-header">Sunday</td>
+          <td class="table-header">Monday</td>
+          <td class="table-header">Tuesday</td>
+          <td class="table-header">Wednesday</td>
+          <td class="table-header">Thursday</td>
+          <td class="table-header">Friday</td>
+          <td class="table-header">Saturday</td>
+        </tr>
+        <tr data-bind="template: { foreach: week1, name: 'day-template' }"></tr>
+        <tr data-bind="template: { foreach: week2, name: 'day-template' }"></tr>
+        <tr data-bind="template: { foreach: week3, name: 'day-template' }"></tr>
+        <tr data-bind="template: { foreach: week4, name: 'day-template' }"></tr>
+        <tr data-bind="template: { foreach: week5, name: 'day-template' }"></tr>
+        <tr data-bind="template: { foreach: week6, name: 'day-template' }"></tr>
+
+      </table>
+    </div>
+    <div id="eventDetails" style="display:none;"></div>
+
+    <dix id="box"></dix>
+  </div>
+  <div id="footer">
+    <a href="http://demos.ethernetbucket.com">Back to Demos</a>
+    <a href="javascript:;" id="aboutButton">About</a>
+  </div>
+
+  <!-- Modal -->
+
+  <div class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto;">
+    <div class="fancybox-wrap fancybox-desktop fancybox-type-html fancybox-opened" tabindex="-1" style="width: 330px; height: auto; position: absolute; top: 282px; left: 522px; opacity: 1; overflow: visible;">
+      <div class="fancybox-skin" style="padding: 15px; width: auto; height: auto;">
+        <div class="fancybox-outer">
+          <div class="fancybox-inner" style="overflow: auto; width: 300px; height: auto;">
+            <div id="eventDetails">
+            <p class="eventDetailsItem">title:</p><span data-bind="text: $root.selectedItem().title"></span><br>
+            <p class="eventDetailsItem">date:</p><span data-bind="text: $root.selectedItem().date"></span><br>
+            <p class="eventDetailsItem">time:</p> <span data-bind="text: $root.selectedItem().time"></span><br>
+            <p class="eventDetailsItem">description:</p><span data-bind="text: $root.selectedItem().description"></span><br>
+            <div class="closeModal" data-bind="hideItem:$data">
+              <p>click here to close</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Templates -->
+  <script type="text/html" id="day-template">
+    <td class="Day" data-bind="enableDrop: $data,
+     css: {
+      'other-month': !inCurrentMonth(),
+      'this-month': inCurrentMonth()
+      }">
+      <div class="DateHolder" data-bind="text: displayDate"></div>
+      <ul data-bind="foreach: $root.getItemsForDay(dateString())">
+         <li class="calendarItem" data-bind="text: title, showItem: $data, enableDrag: id" draggable="true"></li>
+      </ul>
+    </td>
+  </script>
+  <!-- end:Templates -->
+
+  <script data-main="src/require-config.js" src="bower_components/requirejs/require.js"></script>
+</body>
+</html>
