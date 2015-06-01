@@ -11,7 +11,9 @@ define([
   'bindings/enableDrag',
   'bindings/enableDrop',
   'bindings/incMonth',
-  'bindings/decMonth'
+  'bindings/decMonth',
+  'bindings/showAbout',
+  'bindings/hideAbout'
 ],
 function (_, moment, ko, monthViewModel, itemsModel) {
   function appViewModel () {
