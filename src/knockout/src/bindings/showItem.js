@@ -6,7 +6,7 @@ define(['knockout', 'jquery'], function (ko, $) {
       val = val();
         $(elem).click(function () {
           c.$root.selectedItem(val);
-          $('.fancybox-overlay').show();
+          $('#item-detail-box').show();
         });
     }
   }
