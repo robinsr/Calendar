@@ -1,35 +1,30 @@
 'use strict';
 
-define(['backbone', 'collections/items', 'text!../../../common/items.json'], function (backbone, ItemList, items) {
-  var items = JSON.parse(items);
+define( [ 'backbone', 'moment' ], function ( backbone, moment ) {
+  
   return backbone.Model.extend({
-    defaults:{
-      displayDate: "NA",
-      isThisMonth: true,
-      isWeekOne: false,
-      isWeekTwo: false,
-      isWeekThree: false,
-      isWeekFour: false,
-      isWeekFive: false,
-      isWeekSix: false,
-      items: new ItemList(items)
+    defaults: { 
+      date: null,
+      dayOfWeek: null,
+      weekOfYear: null,
+      weekOffset: null,
+      displayDate: null,
+      items: []
     },
 
-    initialize: function() {
-      var _this = this;
-      this.determineWeek();
-      this.attributes.items = this.attributes.items.filter(function (item) {
-        return item.attributes.date == _this.attributes.stringDate
-      });
+    initialize: function ( model ) {
+      if ( !model.date ) return;
+
+      var now = moment( model.date );
+
+      this.set( 'weekOfYear', now.week() );
+      this.set( 'dayOfWeek', now.day() );
+
+      this.set( 'positionX', now.day() );
+      this.set( 'positionY', now.week() - model.weekOffset );
+
+      this.set( 'displayDate', now.format( 'D' ) );
       return this;
-    },
-
-    determineWeek: function() {
-      var weekBools = ['isWeekOne','isWeekTwo','isWeekThree','isWeekFour','isWeekFive','isWeekSix']
-
-      for (var i = 0; i < weekBools.length; i++) {
-        this.attributes[weekBools[i]] = this.attributes.week === i;
-      };
     }
-  });
-});
+  } );
+} );

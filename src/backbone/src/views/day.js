@@ -9,26 +9,29 @@ function (backbone, _, $, template) {
 
   var DayView = Backbone.View.extend({
 
-    tagName: 'td',
+    tagName: 'li',
+
+    className: 'Day',
 
     events: {
       'click .calendarItem': 'itemClicked'
     },
 
+    tmpl: template,
+
     initialize: function() {
-      this.template = template;
       return this
     },
 
     render: function () {
-      this.$el.html(this.template(this.model.attributes))
-      this.$el.addClass('Day');
-      if (this.model.attributes.isThisMonth) {
-        this.$el.addClass('this-month');
-      } else {
-        this.$el.addClass('other-month');
+      this.$el.html( this.tmpl( this.model.toJSON() ) );
+      this.$el.addClass( 'day-position-' + this.model.get( 'positionX' ) + '-' + this.model.get( 'positionY' ) );
+
+      if ( this.model.get( 'isInMonthRange' ) ) {
+        this.$el.addClass( 'this-month' );
       }
-      return this
+
+      return this;
     },
 
     itemClicked: function (e) {

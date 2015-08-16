@@ -1,58 +1,37 @@
 'use strict';
 
-define([
-  'backbone',
-  'underscore',
-  'jquery',
-  'moment',
-  'pubsub',
-  'collections/days',
-  'collections/items',
-  'views/monthView',
-  'hbs!templates/month'], 
-function (backbone, _, $, moment, pubsub, DayList, ItemList, MonthView, template) {
+define(
+  [
+    'backbone',
+    'moment',
+    'collections/items',
+    'views/monthView'
+  ], 
+  function ( backbone, moment, ItemList, MonthView ) {
 
-  console.log(pubsub)
+    var items = new ItemList();
 
-  var AppView = Backbone.View.extend({
-    el: $("#wrap"),
+    var AppModel = Backbone.Model.extend( {
+      defaults: {
+        date: null,
+        weekOffset: null,
+        items: items
+      }
+    } );
 
-    events: {
-      'click #decrementMonthButton': 'decrementMonth',
-      'click #incrementMonthButton': 'incrementMonth'
-    },
+    var now = moment().toISOString();
 
-    decrementMonth: function () {
-      this.initialDate.subtract(1, 'month');
-      this.render();
-    },
+    var weekOffset = moment( now ).startOf( 'month' ).week();
 
-    incrementMonth: function () {
-      this.initialDate.add(1, 'month');
-      this.render();
-    },
+    var app = new MonthView( {
+      el: '#wrap',
+      model: new AppModel( {
+        date: now,
+        weekOffset: weekOffset 
+      } )
+    } );
 
-    initialize: function () {
-      var _this = this;
-      this.initialDate = moment();
-      this.template = template;
-      this.Days = new DayList();
-      window.pubSub = _.extend({},Backbone.Events);
-      window.pubSub.on('click:item', function (item) {
-        console.log('hello from app!')
-      })
-    },
+    items.fetch();
 
-    render: function () {
-      this.Days.reset();
-      this.Days.generateDays(this.initialDate);
-      var d = new MonthView({ collection: this.Days })
-      this.$("#calendar").html(d.render().el);
-      this.$("#monthName").text(this.initialDate.format("MMMM"));
-      this.$("#yearName").text(this.initialDate.format("YYYY"));
-    }
-  });
-
-  var app = new AppView();
-  app.render();
-});
+  }
+);

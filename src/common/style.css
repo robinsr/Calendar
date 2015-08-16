@@ -36,33 +36,39 @@ body {
 #footer a {
     color: #fff;
 }
-#calendar table {
+#calendar table,
+#calendar ul {
     border-spacing: 4px;
     width:940px;
     display:block;
     margin:0 auto 0 auto;
 }
-#calendar td {
+#calendar .Day {
     border-radius: 3px;
     border-bottom-right-radius: 0px;
     vertical-align: top;
     width:134px;
-}
-#calendar td.table-header {
-    text-align: center;
-    color: #ffffff;
-}
-#calendar td.Day {
+    background-color: #777;
     max-height: 80px;
     overflow: hidden;
     height: 80px;
     font-size: 12px;
 }
-#calendar .this-month {
+#calendar .table-header {
+    text-align: center;
+    color: #ffffff;
+}
+#calendar .Day.this-month {
     background-color: #efe0a5;
 }
-#calendar .other-month {
-    background-color: #777;
+#calendar ul {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+}
+#calendar ul#month-body li.Day,
+#calendar ul#month-header li {
+    width: 14.285714285%;
 }
 #calendar .DateHolder {
     font-weight: bold;
