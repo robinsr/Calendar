@@ -18,11 +18,13 @@
   ],
   "dependencies": {
     "jquery": "~2.1.1",
-    "backbone": "~1.1.2",
+    "backbone": "*",
     "requirejs": "~2.1.15",
     "require-handlebars-plugin": "~0.10.0",
-    "lodash": "~2.4.1",
+    "lodash": "*",
     "requirejs-text": "~2.0.12",
-    "moment": "~2.10.6"
+    "moment": "~2.10.6",
+    "underscore": "~1.8.3",
+    "fancybox": "~2.1.5"
   }
 }

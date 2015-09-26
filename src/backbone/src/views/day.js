@@ -2,41 +2,56 @@
 
 define([
   'backbone',
-  'underscore',
+  'lodash',
   'jquery',
+  'moment',
   'hbs!templates/day'], 
-function (backbone, _, $, template) {
+function (backbone, _, $, moment, template) {
 
   var DayView = Backbone.View.extend({
 
     tagName: 'li',
 
-    className: 'Day',
+    className: 'day-container',
 
     events: {
-      'click .calendarItem': 'itemClicked'
+      'click li.calendarItem'    : 'itemClicked',
+      'dragstart li.calendarItem': 'handleDragstart',
+      'drop div.Day'             : 'handleDrop'
     },
 
     tmpl: template,
 
-    initialize: function() {
-      return this
-    },
-
     render: function () {
       this.$el.html( this.tmpl( this.model.toJSON() ) );
-      this.$el.addClass( 'day-position-' + this.model.get( 'positionX' ) + '-' + this.model.get( 'positionY' ) );
 
-      if ( this.model.get( 'isInMonthRange' ) ) {
-        this.$el.addClass( 'this-month' );
-      }
+      this.$el.on("dragover", function (e) {
+        e.preventDefault();
+      });
+
+      this.$el.on("dragenter", function (e) {
+        e.preventDefault();
+      });
 
       return this;
     },
 
     itemClicked: function (e) {
-      console.log(e)
-      window.pubSub.trigger('click:item')
+      backbone.trigger( 'item:click', {
+        model: $( e.target ).data( 'cid' )
+      } );
+    },
+
+    handleDragstart: function (e) {
+      e.originalEvent.dataTransfer.setData( 'calendar', $( e.target ).data( 'cid' ) );
+    },
+
+    handleDrop: function (e) {
+      var cid = e.originalEvent.dataTransfer.getData( 'calendar' );
+      backbone.trigger( 'item:drop', { 
+        model: cid,
+        newDate: moment( this.model.attributes.date ).format( 'M/D/YYYY' )
+      } );
     }
   });
 

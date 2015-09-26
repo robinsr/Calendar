@@ -1,6 +1,8 @@
-<div class="Dateholder">{{ displayDate }}</div>
-<ul>
-  {{#items}}
-  <li class="calendarItem" draggable="true">{{ attributes.title }}</li>
-  {{/items}}
-</ul>
+<div class="Day {{#if isInMonthRange}}this-month{{/if}}">
+  <div class="Dateholder">{{ displayDate }}</div>
+  <ul>
+    {{#items}}
+    <li class="calendarItem" draggable="true" data-cid="{{ cid }}">{{ attributes.title }}</li>
+    {{/items}}
+  </ul>
+</div>

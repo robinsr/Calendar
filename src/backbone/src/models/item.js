@@ -2,17 +2,11 @@
 
 define(['backbone'], function (backbone) {
   return backbone.Model.extend({
-    defaults: function () {
-      return {
-        title: "Empty Item"
+    defaults: {
+        title       : "Empty Item",
+        date        : null,
+        time        : null,
+        description : null
       }
-    },
-
-    initialize: function() {
-      if (!this.get("title")) {
-        this.set({"title": this.defaults().title});
-      }
-    }
-
   });
 });
