@@ -57,20 +57,32 @@ body {
   color: #ffffff; }
 #calendar .DateHolder {
   font-weight: bold; }
-#calendar .calendarItem {
-  text-transform: capitalize;
-  cursor: pointer; }
+#calendar ul.calendarItems {
+  padding: 0 4px; }
+  #calendar ul.calendarItems li.calendarItem {
+    text-transform: capitalize;
+    cursor: pointer; }
 .backbone #calendar > ul {
   list-style-type: none;
   display: flex;
   flex-wrap: wrap;
   padding: 0; }
-  .backbone #calendar > ul li {
+  .backbone #calendar > ul > li {
     width: 14.285714285%;
     margin-bottom: 4px; }
-    .backbone #calendar > ul li .Day {
+    .backbone #calendar > ul > li .Day {
       width: 96%;
-      margin: 0 2%; }
+      margin: 0 2%;
+      transform: translateY(30px);
+      opacity: 0; }
+      .backbone #calendar > ul > li .Day.in {
+        transition: all 1s;
+        transform: translateY(0);
+        opacity: 1; }
+      .backbone #calendar > ul > li .Day.out {
+        transition: all 1s;
+        transform: translateY(-30px);
+        opacity: 0; }
 
 #eventDetails,
 #about {

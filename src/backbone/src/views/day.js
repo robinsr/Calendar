@@ -33,6 +33,8 @@ function (backbone, _, $, moment, template) {
         e.preventDefault();
       });
 
+      this.model.set( 'isRendered', true );
+
       return this;
     },
 
@@ -52,6 +54,18 @@ function (backbone, _, $, moment, template) {
         model: cid,
         newDate: moment( this.model.attributes.date ).format( 'M/D/YYYY' )
       } );
+    },
+
+    reveal: function () {
+      this.$( '.Day' ).addClass( 'in' );
+    },
+
+    hide: function () {
+      var $elem = this.$( '.Day' );
+      $elem.addClass( 'out' );
+      setTimeout( function () {
+        $elem.removeClass( 'in out' );
+      }, 1000 )
     }
   });
 

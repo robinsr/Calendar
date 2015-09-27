@@ -6,7 +6,8 @@ define( [ 'backbone', 'moment' ], function ( backbone, moment ) {
     defaults: { 
       date: null,
       displayDate: null,
-      items: []
+      items: [],
+      isRendered: false
     },
 
     // Sets the 'displayDate' model property
