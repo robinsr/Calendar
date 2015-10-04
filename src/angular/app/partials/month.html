@@ -11,13 +11,15 @@
 </div>
 <div id="calendar">
     <ul>
-        <li ng-repeat="day in days" class="Day {{ day.className }}" drop-area>
-            <div class="Dateholder">{{ day.displayDate }}</div>
-            <ul class="calendarItems">
-                <li ng-repeat="item in items | dateMatch:day" class="calendarItem" draggable="true" drag-item>
-                    <a ng-href="#/{{current.year}}/{{current.month}}?item={{item.key}}">{{ item.title }}</a>
-                </li>
-            </ul>
+        <li ng-repeat="day in days">
+            <div class="Day {{ day.className }}" drop-area sequence-render>
+                <div class="DateHolder">{{ day.displayDate }}</div>
+                <ul class="calendarItems">
+                    <li ng-repeat="item in items | dateMatch:day" class="calendarItem" draggable="true" drag-item>
+                        <a ng-href="#/{{current.year}}/{{current.month}}?item={{item.key}}">{{ item.title }}</a>
+                    </li>
+                </ul>
+            </div>
         </li>
     </ul>
 </div>

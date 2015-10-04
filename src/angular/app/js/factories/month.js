@@ -42,7 +42,8 @@ angular.module( 'calendar' ).factory( 'Month', function () {
       },
       monthName: now.format( 'MMMM' ),
       yearName: now.format( 'YYYY' ),
-      days: days
+      days: days,
+      pageTitle: now.format( 'MMMM' ) + ', ' + now.format( 'YYYY' )
     }
   }
 } );

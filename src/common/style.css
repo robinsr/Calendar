@@ -49,7 +49,8 @@ body {
   max-height: 80px;
   overflow: hidden;
   height: 80px;
-  font-size: 12px; }
+  font-size: 12px;
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.5); }
   #calendar .Day.this-month {
     background-color: #efe0a5; }
 #calendar .table-header {
@@ -74,10 +75,13 @@ body {
   padding: 0; }
   .backbone #calendar > ul > li, .angular #calendar > ul > li {
     width: 14.285714285%;
-    margin-bottom: 4px; }
+    margin-bottom: 4px;
+    display: inline-flex; }
     .backbone #calendar > ul > li .Day, .angular #calendar > ul > li .Day {
       width: 96%;
       margin: 0 2%;
+      max-height: none;
+      min-height: 100px;
       transform: translateY(30px);
       opacity: 0; }
       .backbone #calendar > ul > li .Day.in, .angular #calendar > ul > li .Day.in {
@@ -127,11 +131,20 @@ body {
     width: 36px;
     height: 36px;
     background-image: url("../common/fancybox/fancybox_sprite.png"); }
+  #buttonControls a {
+    display: inline-block; }
 
 #decrementMonthButton {
   background-position: 0 -36px; }
 
 #incrementMonthButton {
   background-position: 0 -72px; }
+
+.angular #wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; }
+  .angular #wrap .container {
+    margin-top: -12%; }
 
 /*# sourceMappingURL=style.css.map */

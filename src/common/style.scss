@@ -57,6 +57,7 @@ body {
         overflow: hidden;
         height: 80px;
         font-size: 12px;
+        box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.5);
 
         &.this-month {
             background-color: #efe0a5;
@@ -100,10 +101,13 @@ body {
             > li {
                 width: 14.285714285%;
                 margin-bottom: 4px;
+                display: inline-flex;
 
                 .Day {
                     width: 96%;
                     margin: 0 2%;
+                    max-height: none;
+                    min-height: 100px;
 
                     // initial pre-render state
                     transform: translateY(30px);
@@ -168,6 +172,10 @@ body {
         height: 36px;
         background-image: url('../common/fancybox/fancybox_sprite.png');
     }
+
+    a {
+        display: inline-block;
+    }
 }
 
 #decrementMonthButton{
@@ -176,4 +184,14 @@ body {
 
 #incrementMonthButton{
     background-position: 0 -72px;
+}
+
+.angular #wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .container {
+        margin-top: -12%;
+    }
 }
