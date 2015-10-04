@@ -1,0 +1,34 @@
+<div id="buttonControls">
+    <a ng-href="#/{{previous.year}}/{{previous.month}}">
+        <img src="../../../common/fancybox/blank.gif" id="decrementMonthButton" />
+    </a>
+    <div id="tableCaptionWrap">
+        <p id="tableCaption" >{{ monthName + ', ' + yearName }}</p>
+    </div>
+    <a ng-href="#/{{next.year}}/{{next.month}}">
+        <img src="../../../common/fancybox/blank.gif" id="incrementMonthButton" />
+    </a>
+</div>
+<div id="calendar">
+    <ul>
+        <li ng-repeat="day in days" class="Day {{ day.className }}" drop-area>
+            <div class="Dateholder">{{ day.displayDate }}</div>
+            <ul class="calendarItems">
+                <li ng-repeat="item in items | dateMatch:day" class="calendarItem" draggable="true" drag-item>
+                    <a ng-href="#/{{current.year}}/{{current.month}}?item={{item.key}}">{{ item.title }}</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div id="eventDetails" style="display:none;" fancybox ng-if="itemDetail">
+    <p class="eventDetailsItem">title:</p><span>{{ itemDetail.title }}</span><br>
+    <p class="eventDetailsItem">date:</p><span>{{ itemDetail.date }}</span><br>
+    <p class="eventDetailsItem">time:</p> <span>{{ itemDetail.time }}</span><br>
+    <p class="eventDetailsItem">description:</p><span>{{ itemDetail.description }}</span><br>
+    <div class="closeModal">
+        <p><a ng-href="#/{{current.year}}/{{current.month}}">click here to close</a></p>
+    </div>
+</div>
+
+<dix id="box"></dix>

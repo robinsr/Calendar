@@ -78,11 +78,19 @@ body {
         li.calendarItem {
             text-transform: capitalize;
             cursor: pointer;
+
+            a,
+            a:visited,
+            a:active {
+                color: #000;
+                text-decoration: none;
+            }
         }
     }
 
     
-    .backbone & {
+    .backbone &,
+    .angular & {
         > ul {
             list-style-type: none;
             display: flex;

@@ -62,24 +62,29 @@ body {
   #calendar ul.calendarItems li.calendarItem {
     text-transform: capitalize;
     cursor: pointer; }
-.backbone #calendar > ul {
+    #calendar ul.calendarItems li.calendarItem a,
+    #calendar ul.calendarItems li.calendarItem a:visited,
+    #calendar ul.calendarItems li.calendarItem a:active {
+      color: #000;
+      text-decoration: none; }
+.backbone #calendar > ul, .angular #calendar > ul {
   list-style-type: none;
   display: flex;
   flex-wrap: wrap;
   padding: 0; }
-  .backbone #calendar > ul > li {
+  .backbone #calendar > ul > li, .angular #calendar > ul > li {
     width: 14.285714285%;
     margin-bottom: 4px; }
-    .backbone #calendar > ul > li .Day {
+    .backbone #calendar > ul > li .Day, .angular #calendar > ul > li .Day {
       width: 96%;
       margin: 0 2%;
       transform: translateY(30px);
       opacity: 0; }
-      .backbone #calendar > ul > li .Day.in {
+      .backbone #calendar > ul > li .Day.in, .angular #calendar > ul > li .Day.in {
         transition: all 1s;
         transform: translateY(0);
         opacity: 1; }
-      .backbone #calendar > ul > li .Day.out {
+      .backbone #calendar > ul > li .Day.out, .angular #calendar > ul > li .Day.out {
         transition: all 1s;
         transform: translateY(-30px);
         opacity: 0; }
