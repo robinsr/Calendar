@@ -1,28 +1,33 @@
-<div id="buttonControls">
-    <a ng-href="#/{{previous.year}}/{{previous.month}}">
-        <img src="../../../common/fancybox/blank.gif" id="decrementMonthButton" />
-    </a>
-    <div id="tableCaptionWrap">
-        <p id="tableCaption" >{{ monthName + ', ' + yearName }}</p>
-    </div>
-    <a ng-href="#/{{next.year}}/{{next.month}}">
-        <img src="../../../common/fancybox/blank.gif" id="incrementMonthButton" />
-    </a>
+<div id="controls">
+    <a class="item" ng-href="#/{{previous.year}}/{{previous.month}}">Back one month</a>
+    <p class="item" >{{ monthName }}, {{ yearName }}</p>
+    <a class="item" ng-href="#/{{next.year}}/{{next.month}}">Forward one month</a>
 </div>
-<div id="calendar">
-    <ul>
-        <li ng-repeat="day in days">
-            <div class="Day {{ day.className }}" drop-area sequence-render>
-                <div class="DateHolder">{{ day.displayDate }}</div>
-                <ul class="calendarItems">
-                    <li ng-repeat="item in items | dateMatch:day" class="calendarItem" draggable="true" drag-item>
-                        <a ng-href="#/{{current.year}}/{{current.month}}?item={{item.key}}">{{ item.title }}</a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-    </ul>
-</div>
+
+<ul id="calendar" class="weeks-{{ weekCount }}">
+    <li ng-repeat="head in headers" class="header">{{ head }}</li>
+    <li ng-repeat="day in days" class="day {{ day.className }}" drop-area sequence-render>
+        <p class="date">{{ day.displayDate }}</p>
+        <ul>
+            <li ng-repeat="item in items | dateMatch:day" class="item" draggable="true" drag-item>
+                <a ng-href="#/{{current.year}}/{{current.month}}?item={{item.key}}">{{ item.title }}</a>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<ul id="scroll" ng-controller="ScrollController">
+    <li ng-repeat="day in days | hasItems:items" class="day this-month" sequence-render>
+    <p class="date">{{ day.date }}</p>
+        <ul>
+            <li ng-repeat="item in items | dateMatch:day" class="item">
+                <a ng-href="#/{{current.year}}/{{current.month}}?item={{item.key}}">{{ item.title }}</a>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+
 <div id="eventDetails" style="display:none;" fancybox ng-if="itemDetail">
     <p class="eventDetailsItem">title:</p><span>{{ itemDetail.title }}</span><br>
     <p class="eventDetailsItem">date:</p><span>{{ itemDetail.date }}</span><br>
@@ -32,5 +37,3 @@
         <p><a ng-href="#/{{current.year}}/{{current.month}}">click here to close</a></p>
     </div>
 </div>
-
-<dix id="box"></dix>
