@@ -19,42 +19,15 @@ angular.module( 'calendar' ).factory( 'Month', function () {
     for (var i = 0; i <= daysInView; i++) {
           
       // Get a moment object for this day
-      var dayMoment = moment( calendarStart ).add( i, 'days' );
+      days.push( moment( calendarStart ).add( i, 'days' ).toISOString() );
 
-      days.push( {
-        date: dayMoment.format( 'M/D/YYYY' ),
-        displayDate: dayMoment.format( 'Do' ),
-        className: dayMoment.format( 'M' ) === params.month ? 'this-month' : 'other-month'
-      } );
-    }
-
-    var headers = [];
-    var n = 0;
-    while ( n < 7 ) {
-      console.log(headers)
-      headers.push( calendarStart.format( 'dddd' ) );
-      calendarStart.add( 1, 'days' );
-      n++;
     }
     
     return {
-      current: {
-        year: now.format( 'YYYY' ),
-        month: now.format( 'M' )
-      },
-      next: {
-        year: next.format( 'YYYY' ),
-        month: next.format( 'M' )
-      }, 
-      previous: {
-        year: previous.format( 'YYYY' ),
-        month: previous.format( 'M' )
-      },
-      monthName: now.format( 'MMMM' ),
-      yearName: now.format( 'YYYY' ),
-      days: days,
-      pageTitle: now.format( 'MMMM' ) + ', ' + now.format( 'YYYY' ),
-      headers: headers,
+      current  : now.toISOString(),
+      next     : next.toISOString(),
+      previous : previous.toISOString(),
+      days     : days,
       weekCount: weekCount
     }
   }

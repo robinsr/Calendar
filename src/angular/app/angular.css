@@ -121,10 +121,21 @@ body {
 
 #calendar {
   font-size: 1vw; }
+  #calendar ::-webkit-scrollbar {
+    width: 0.5em;
+    height: 0.5em; }
+  #calendar ::-webkit-scrollbar-thumb {
+    background: #f7efd2; }
+  #calendar ::-webkit-scrollbar-track {
+    background: #efe0a5; }
+  #calendar body {
+    scrollbar-face-color: #f7efd2;
+    scrollbar-track-color: #efe0a5; }
   #calendar .header {
     color: #fff;
     text-align: center; }
   #calendar .day {
+    overflow: auto;
     border-radius: 3px;
     border-bottom-right-radius: 0px;
     box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.5);

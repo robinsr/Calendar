@@ -2,28 +2,29 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300);
 
 $body-font: 'Open Sans', sans-serif;
+$stick-note-in: #efe0a5;
+$sticky-note-out: #777;
 
 @mixin sticky-note() {
     border-radius: 3px;
     border-bottom-right-radius: 0px;
     box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.5);
 
+    transform: translateY(30px);
+    opacity: 0;
+
     &.other-month {
-        background-color: #777;
+        background-color: $sticky-note-out;
     }
 
     &.this-month {
-        background-color: #efe0a5;
+        background-color: $stick-note-in;
     }
-
-    // initial pre-render state
-    transform: translateY(30px);
-    opacity: 0;
 
     &.in {
         transition: transform 1s, opacity 1s;
         transform: translateY(0);
-        opacity: 1;
+        opacity: 1;   
     }
 
     &.out {
@@ -44,21 +45,6 @@ $body-font: 'Open Sans', sans-serif;
     background-position: 100% -36px;
     background-repeat: no-repeat;
     transform: rotate( $angle );
-}
-
-@mixin make-aspect-ratios () {
-    $start: 1/5;
-    $end: 5;
-
-    @while $start < $end {
-        $className: round($start * 100);
-        @media screen and (min-aspect-ratio: #{$start}/1) {
-            .ratio-#{$className} {
-                display: block;
-            }
-        }
-        $start: $start + 1/5;
-    }
 }
 
 @mixin scrollbars($size, $foreground-color, $background-color: mix($foreground-color, white,  50%)) {
@@ -238,12 +224,14 @@ body {
 
 #calendar {
     font-size: 1vw;
+    @include scrollbars( .5em, $stick-note-in );
     
     .header {
         color: #fff;
         text-align: center;
     }
     .day {
+        overflow: auto;
         @include sticky-note();
     }
 }

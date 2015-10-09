@@ -7,6 +7,11 @@ angular.module( 'calendar' ).directive( 'sequenceRender', function () {
       setTimeout( function () {
         $( elem ).addClass( 'in' );
       }, delay );
+
+      scope.$on( 'refreshing', function () {
+        console.log('here')
+      } )
+
     }
   };
 } );

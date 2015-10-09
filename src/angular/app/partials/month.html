@@ -1,30 +1,32 @@
 <div id="controls">
-    <a class="item" ng-href="#/{{previous.year}}/{{previous.month}}">Back one month</a>
-    <p class="item" >{{ monthName }}, {{ yearName }}</p>
-    <a class="item" ng-href="#/{{next.year}}/{{next.month}}">Forward one month</a>
+    <a class="item" ng-href="#/{{ previous|formatDate:'YYYY' }}/{{ previous|formatDate:'M' }}" triggers-refresh>Back one month</a>
+    <p class="item" >{{ current|formatDate:'MMMM' }}, {{ current|formatDate:'YYYY' }}</p>
+    <a class="item" ng-href="#/{{ next|formatDate:'YYYY' }}/{{ next|formatDate:'M' }}" triggers-refresh>Forward one month</a>
 </div>
 
-<ul id="calendar" class="weeks-{{ weekCount }}">
-    <li ng-repeat="head in headers" class="header">{{ head }}</li>
-    <li ng-repeat="day in days" class="day {{ day.className }}" drop-area sequence-render>
-        <p class="date">{{ day.displayDate }}</p>
+<ul id="calendar" class="weeks-{{ weekCount }}" ng-init="headers = [0,1,2,3,4,5,6]">
+    <li ng-repeat="head in headers" class="header">{{ head|formatDate:'dddd' }}</li>
+    <li ng-repeat="day in days" class="day {{ day|monthClass:current }}" drop-area sequence-render>
+        <p class="date">{{ day|formatDate:'Do' }}</p>
         <ul>
             <li ng-repeat="item in items | dateMatch:day" class="item" draggable="true" drag-item>
-                <a ng-href="#/{{current.year}}/{{current.month}}?item={{item.key}}">{{ item.title }}</a>
+                <a ng-href="#/{{ current|formatDate:'YYYY' }}/{{ current|formatDate:'M' }}?item={{item.key}}">{{ item.title }}</a>
             </li>
         </ul>
     </li>
 </ul>
 
-<ul id="scroll" ng-controller="ScrollController">
+<ul id="scroll">
+    <li id="scroll-top" class="scroll-end">&#x25BC; {{ next|formatDate:'MMMM' }}, {{ next|formatDate:'YYYY' }}</li>
     <li ng-repeat="day in days | hasItems:items" class="day this-month" sequence-render>
-    <p class="date">{{ day.date }}</p>
+        <p class="date">{{ day|formatDate:'M/DD/YYYY' }}</p>
         <ul>
             <li ng-repeat="item in items | dateMatch:day" class="item">
-                <a ng-href="#/{{current.year}}/{{current.month}}?item={{item.key}}">{{ item.title }}</a>
+                <a ng-href="#/{{ current|formatDate:'YYYY' }}/{{ current|formatDate:'M' }}?item={{item.key}}">{{ item.title }}</a>
             </li>
         </ul>
     </li>
+    <li id="scroll-top" class="scroll-end">&#x25B2; {{ previous|formatDate:'MMMM' }}, {{ previous|formatDate:'YYYY' }}</li>
 </ul>
 
 
@@ -34,6 +36,6 @@
     <p class="eventDetailsItem">time:</p> <span>{{ itemDetail.time }}</span><br>
     <p class="eventDetailsItem">description:</p><span>{{ itemDetail.description }}</span><br>
     <div class="closeModal">
-        <p><a ng-href="#/{{current.year}}/{{current.month}}">click here to close</a></p>
+        <p><a ng-href="#/{{ current|formatDate:'YYYY' }}/{{ current|formatDate:'M' }}">click here to close</a></p>
     </div>
 </div>
