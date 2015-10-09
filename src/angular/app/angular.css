@@ -61,13 +61,18 @@ html {
         height: 18.3%; }
       #wrap #container #calendar.weeks-6 .day {
         height: 15.25%; }
-    #wrap #container #scroll {
+    #wrap #container #list {
       width: 30%;
-      height: 85.5%;
-      display: flex;
-      flex-direction: column-reverse; }
-      #wrap #container #scroll .day:nth-child(n+2) {
-        margin-bottom: 4px; }
+      height: 85.5%; }
+      #wrap #container #list .scroll-end {
+        height: 10%; }
+      #wrap #container #list #scroll {
+        min-height: 100%;
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: center; }
+        #wrap #container #list #scroll .day:nth-child(n+2) {
+          margin-bottom: 4px; }
 
 ::-webkit-scrollbar {
   width: 0.5em;
@@ -154,28 +159,33 @@ body {
       transform: translateY(-30px);
       opacity: 0; }
 
-#scroll {
-  overflow-y: auto;
-  font-size: 1vw; }
-  #scroll .day {
-    border-radius: 3px;
-    border-bottom-right-radius: 0px;
-    box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.5);
-    transform: translateY(30px);
-    opacity: 0;
-    padding: 4px 0; }
-    #scroll .day.other-month {
-      background-color: #777; }
-    #scroll .day.this-month {
-      background-color: #efe0a5; }
-    #scroll .day.in {
-      transition: transform 1s, opacity 1s;
-      transform: translateY(0);
-      opacity: 1; }
-    #scroll .day.out {
-      transition: transform 1s, opacity 1s;
-      transform: translateY(-30px);
-      opacity: 0; }
+#list {
+  overflow-y: scroll; }
+  #list #scroll {
+    font-size: 1vw; }
+    #list #scroll .day {
+      border-radius: 3px;
+      border-bottom-right-radius: 0px;
+      box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.5);
+      transform: translateY(30px);
+      opacity: 0;
+      padding: 4px 0; }
+      #list #scroll .day.other-month {
+        background-color: #777; }
+      #list #scroll .day.this-month {
+        background-color: #efe0a5; }
+      #list #scroll .day.in {
+        transition: transform 1s, opacity 1s;
+        transform: translateY(0);
+        opacity: 1; }
+      #list #scroll .day.out {
+        transition: transform 1s, opacity 1s;
+        transform: translateY(-30px);
+        opacity: 0; }
+  #list .scroll-end {
+    display: flex; }
+    #list .scroll-end p {
+      margin: auto; }
 
 #footer {
   height: 40px;

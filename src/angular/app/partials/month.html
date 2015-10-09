@@ -16,18 +16,24 @@
     </li>
 </ul>
 
-<ul id="scroll">
-    <li id="scroll-top" class="scroll-end">&#x25BC; {{ next|formatDate:'MMMM' }}, {{ next|formatDate:'YYYY' }}</li>
-    <li ng-repeat="day in days | hasItems:items" class="day this-month" sequence-render>
-        <p class="date">{{ day|formatDate:'M/DD/YYYY' }}</p>
-        <ul>
-            <li ng-repeat="item in items | dateMatch:day" class="item">
-                <a ng-href="#/{{ current|formatDate:'YYYY' }}/{{ current|formatDate:'M' }}?item={{item.key}}">{{ item.title }}</a>
-            </li>
-        </ul>
-    </li>
-    <li id="scroll-top" class="scroll-end">&#x25B2; {{ previous|formatDate:'MMMM' }}, {{ previous|formatDate:'YYYY' }}</li>
-</ul>
+<div id="list" center-scroll>
+    <div id="scroll-top" class="scroll-end">
+        <p>&#x25B2; {{ previous|formatDate:'MMMM' }}, {{ previous|formatDate:'YYYY' }}</p>
+    </div>
+    <ul id="scroll">
+        <li ng-repeat="day in days | hasItems:items" class="day this-month" sequence-render>
+            <p class="date">{{ day|formatDate:'M/DD/YYYY' }}</p>
+            <ul>
+                <li ng-repeat="item in items | dateMatch:day" class="item">
+                    <a ng-href="#/{{ current|formatDate:'YYYY' }}/{{ current|formatDate:'M' }}?item={{item.key}}">{{ item.title }}</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <div id="scroll-bottom" class="scroll-end">
+        <p>&#x25BC; {{ next|formatDate:'MMMM' }}, {{ next|formatDate:'YYYY' }}</p>
+    </div>
+</div>
 
 
 <div id="eventDetails" style="display:none;" fancybox ng-if="itemDetail">

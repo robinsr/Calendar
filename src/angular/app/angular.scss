@@ -178,16 +178,25 @@ $item-space: 0.25%;
             }
         }
 
-        #scroll {
+        #list {
             width: 30%;
             height: 85% + ( $item-space * 2 );
-            display: flex;
-            flex-direction: column-reverse;
 
-            .day {
+            .scroll-end {
+                height: 10%;
+            }
 
-                &:nth-child( n+2 ) {
-                    margin-bottom: 4px;
+            #scroll {
+                min-height: 100%;
+                display: flex;
+                flex-direction: column-reverse;
+                justify-content: center;
+
+                .day {
+
+                    &:nth-child( n+2 ) {
+                        margin-bottom: 4px;
+                    }
                 }
             }
         }
@@ -236,13 +245,25 @@ body {
     }
 }
 
-#scroll {
-    overflow-y: auto;
-    font-size: 1vw;
 
-    .day {
-        @include sticky-note();
-        padding: 4px 0;
+#list {
+    overflow-y: scroll;
+
+    #scroll {
+        font-size: 1vw;
+
+        .day {
+            @include sticky-note();
+            padding: 4px 0;
+        }
+    }
+
+    .scroll-end {
+        display: flex;
+
+        p {
+            margin: auto;
+        }
     }
 }
 
