@@ -4,7 +4,7 @@ var watch = require('gulp-watch');
 
 gulp.task('index', function () {
     var sources = gulp
-    .src(['./components/*.comp.js'], {read: false})
+    .src(['./components/*.tag'], {read: false})
 
     var transform = function (filepath, file, i, length) {
         return '<script src="' + filepath + '" type="riot/tag"></script>';
@@ -17,7 +17,7 @@ gulp.task('index', function () {
 });
 
 gulp.task('default', function () {
-    return gulp.watch('./**/*.comp.js',[ 'index' ] );
+    return gulp.watch('./**/*.tag',[ 'index' ] );
 });
 
 
