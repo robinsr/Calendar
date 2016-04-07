@@ -1,7 +1,6 @@
 var gulp = require('gulp');
 var inject = require('gulp-inject');
 var watch = require('gulp-watch');
-var tap = require('gulp-tap');
 
 gulp.task('index', function () {
     var sources = gulp
