@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" class="backbone">
+<head>
+  <meta charset="UTF-8">
+  <title>Calendar - React</title>
+  <link rel="stylesheet" href="../../common/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="../../common/style.css" type="text/css" media="screen" />
+</head>
+<body>
+  <div id="main">
+    <!-- Flux goes here -->
+  </div>
+
+  <div id="wrap">
+
+    <div id="buttonControls">
+      <img src="../../common/fancybox/blank.gif" id="decrementMonthButton" />
+      <div id="tableCaptionWrap">
+        <p id="tableCaption">
+          <span id="month-name"></span>,
+          <span id="year-name"></span>
+        </p>
+      </div>
+      <img src="../../common/fancybox/blank.gif" id="incrementMonthButton" />
+    </div>
+    <div id="calendar">
+      <ul id="month-header">
+        <li class="table-header">Sunday</li>
+        <li class="table-header">Monday</li>
+        <li class="table-header">Tuesday</li>
+        <li class="table-header">Wednesday</li>
+        <li class="table-header">Thursday</li>
+        <li class="table-header">Friday</li>
+        <li class="table-header">Saturday</li>
+      </ul>
+      <ul id="month-body"></ul>
+    </div>
+    <div id="eventDetails" style="display:none;"></div>
+
+    <div id="about" style="display:none;">
+      <p class="eventDetailsItem">About:</p>
+      <p>Built for a prospective client who needed a way to easily update a calendar of events on their website. The app loads a CSV file (made in Excel and easily updateable), parses the contents, and then plots the items on the calendar. Visitors can click through each month to see scheduled events, or click on events to trigger a lighbox-like modal with the event's details.<br /><a href='/common/data.txt'>CSV events file</a></p>
+      <div class="closeModal"><p>click here to close</p></div>
+    </div>
+
+    <dix id="box"></dix>
+  </div>
+  <div id="footer">
+    <a href="http://demos.ethernetbucket.com">Back to Demos</a>
+    <a href="#" id="aboutButton">About</a>
+  </div>
+
+  <div id="eventDetails" style="display:none;"></div>
+
+  <script src="js/index.js"></script>
+</body>
+</html>
