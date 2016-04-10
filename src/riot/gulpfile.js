@@ -36,7 +36,7 @@ gulp.task('inject', function () {
 });
 
 gulp.task('watch', function () {
-    return gulp.watch('./src/**/*.{tag,js}',[ 'inject' ] );
+    return gulp.watch('./src/**/*.{tag,js,html}',[ 'inject' ] );
 });
 
 gulp.task('default', [ 'inject' ]);

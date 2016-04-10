@@ -1,12 +1,12 @@
 <calendar>
     <calendar-header>
         <button onclick={ goDown }>Button Left</button>
-        <p>{ monthname }, { yearname }</p>
+        <calendar-title>{ monthname }, { yearname }</calendar-title>
         <button onclick={ goUp }>>Button Right</button>
     </calendar-header>
-    <div class="calendar-body">
+    <calendar-body>
         <day each={ days } data={ this } />
-    </div>
+    </calendar-body>
     <footer>
         <a href="/">Back to Demos</a>
         <a href="/">About</a>
