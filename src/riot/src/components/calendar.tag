@@ -1,11 +1,11 @@
 <calendar>
-    <div class="calender-header">
+    <calendar-header>
         <button onclick={ goDown }>Button Left</button>
         <p>{ monthname }, { yearname }</p>
         <button onclick={ goUp }>>Button Right</button>
-    </div>
+    </calendar-header>
     <div class="calendar-body">
-        <days moment={ moment }/>
+        <day each={ days } data={ this } />
     </div>
     <footer>
         <a href="/">Back to Demos</a>
@@ -13,22 +13,26 @@
     </footer>
 
     <script>
+    this.mixin( 'days' );
+
     var now = moment();
 
     this.monthname = moment( now ).format( 'MMMM' );
     this.yearname = moment( now ).format( 'YYYY' );
-    this.moment = now.toISOString();
+    this.days = this.getDays( now.toISOString(), opts.items );
 
     goUp () {
         now.add( 1, 'month' )
         this.monthname = now.format( 'MMMM' );
         this.yearname = now.format( 'YYYY' );
+        this.days = this.getDays( now.toISOString(), opts.items );
     }
 
     goDown () {
         now.subtract( 1, 'month' )
         this.monthname = now.format( 'MMMM' );
         this.yearname = now.format( 'YYYY' );
+        this.days = this.getDays( now.toISOString(), opts.items );
     }
     </script>
 </calendar>

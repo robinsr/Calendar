@@ -1,7 +1,8 @@
 <day>
-    <items date={ date } />
+    <div class="dateHolder">{ iso }</div>
+    <item each={ items } data={ this } />
 
     <script>
-        this.date = opts.date;
+        this.items = opts.data.items
     </script>
 </day>
