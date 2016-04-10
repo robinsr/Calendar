@@ -4,20 +4,17 @@ var watch = require('gulp-watch');
 
 gulp.task('index', function () {
     var sources = gulp
-    .src(['./components/*.tag'], {read: false})
+    .src(['./src/components/*.tag'], {read: false})
 
     var transform = function (filepath, file, i, length) {
-        return '<script src="' + filepath + '" type="riot/tag"></script>';
-    }
+        return '<script src="src/' + filepath + '" type="riot/tag"></script>';
+    };
 
-
-    return gulp.src('./index.html')
+    return gulp.src('./src/index.html')
     .pipe(inject(sources,{transform: transform,relative:true}))
     .pipe(gulp.dest('./'));
 });
 
 gulp.task('default', function () {
-    return gulp.watch('./**/*.tag',[ 'index' ] );
+    return gulp.watch('./src/**/*.tag',[ 'index' ] );
 });
-
-
