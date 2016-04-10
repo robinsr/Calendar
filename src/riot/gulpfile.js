@@ -2,19 +2,30 @@ var gulp = require('gulp');
 var inject = require('gulp-inject');
 var watch = require('gulp-watch');
 
-gulp.task('index', function () {
+gulp.task('inject', function () {
     var sources = gulp
-    .src(['./src/components/*.tag'], {read: false})
+    .src(['./src/**/*.{tag,js}'], {read: false});
 
     var transform = function (filepath, file, i, length) {
-        return '<script src="src/' + filepath + '" type="riot/tag"></script>';
+        if ( /\.tag/.test( filepath ) ) {
+            return '<script src="src/' + filepath + '" type="riot/tag"></script>';
+        } else {
+            return '<script src="src/' + filepath + '"></script>';
+        }
+    };
+
+    var injectOpts = { 
+        transform: transform, 
+        relative: true 
     };
 
     return gulp.src('./src/index.html')
-    .pipe(inject(sources,{transform: transform,relative:true}))
+    .pipe(inject(sources, injectOpts))
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('default', function () {
-    return gulp.watch('./src/**/*.tag',[ 'index' ] );
+gulp.task('watch', function () {
+    return gulp.watch('./src/**/*.{tag,js}',[ 'inject' ] );
 });
+
+gulp.task('default', [ 'inject' ]);
