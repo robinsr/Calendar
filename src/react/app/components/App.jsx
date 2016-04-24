@@ -1,23 +1,26 @@
+import AltContainer from 'alt-container';
 import React from 'react';
+import {DragDropContext} from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
-import Notes from './Notes.jsx';
+import Lanes from './Lanes.jsx';
+import LaneActions from '../actions/LaneActions';
+import LaneStore from '../stores/LaneStore';
 
-import NoteActions from '../actions/NoteActions';
-import NoteStore from '../stores/NoteStore';
-
+@DragDropContext(HTML5Backend)
 export default class App extends React.Component {
   constructor ( props ) {
     super( props );
 
-    this.state = NoteStore.getState();
+    this.state = LaneStore.getState();
   }
 
   componentDidMount() {
-    NoteStore.listen(this.storeChanged);
+    LaneStore.listen(this.storeChanged);
   }
 
   componentWillUnmount() {
-    NoteStore.unlisten(this.storeChanged);
+    LaneStore.unlisten(this.storeChanged);
   }
 
   storeChanged = (state) => {
@@ -25,34 +28,22 @@ export default class App extends React.Component {
   }
 
   render () {
-    const notes = this.state.notes;
-
     return (
       <div>
-      <button className="add-note" onClick={this.addNote}>+</button>
-      <Notes 
-        notes={notes}
-        onEdit={this.editNote}
-        onDelete={this.deleteNote}/>
+        <button className="add-Lane" onClick={this.addLane}>+</button>
+        <AltContainer
+          stores={[LaneStore]}
+          inject={{
+            lanes: () => LaneStore.getState().lanes || []
+          }}>
+
+          <Lanes />
+        </AltContainer>
       </div>
       );
   }
 
-  addNote = () => {
-    NoteActions.create({task: 'New Task'});
-  };
-
-  editNote = (id, task) => {
-    if (!task.trim()) {
-      return;
-    }
-
-    NoteActions.update({id, task});
-  };
-
-  deleteNote = (id, e) => {
-    e.stopPropagation();
-    
-    NoteActions.delete(id);
+  addLane = () => {
+    LaneActions.create({name: 'New Lane'});
   };
 }
