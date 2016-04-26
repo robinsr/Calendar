@@ -1,5 +1,6 @@
 import React from 'react';
 import Radium from 'radium';
+import Appointment from './Appointment';
 
 const $stickNoteIn = '#efe0a5';
 const $stickyNoteOut = '#777';
@@ -37,11 +38,12 @@ const styles = {
 
 @Radium
 export default class Day extends React.Component {
+  state = {
+    in: false
+  }
+
   constructor(props) {
     super(props);
-    this.state = {
-      in: false
-    };
   }
 
   componentDidMount() {
@@ -60,9 +62,9 @@ export default class Day extends React.Component {
         this.state.in && styles.in
       ]}>
         <span>{day.moment.format('D')}</span>
-        <ul>{day.items.map(item =>
-          <li key={item.date+item.time}>{item.title}</li>
-        )}</ul>
+        <div>{day.items.map(item =>
+          <Appointment key={item.date+item.time} data={item} />
+        )}</div>
       </div>
     );
   }
