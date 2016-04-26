@@ -5,7 +5,7 @@ define(['backbone', 'models/item'], function (backbone, Item) {
 
     model: Item,
 
-    url: '/common/items.json',
+    url: '/common/data/items.json',
 
     initialize: function () {
       // Setup event listener to handle drop events.
