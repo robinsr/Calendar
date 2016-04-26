@@ -1,42 +1,34 @@
 'use strict';
 
-define(
-  [
-    'jquery',
-    'backbone',
-    'fancybox',
-    'hbs!templates/item'
-  ], 
-  function ( $, backbone, Fancybox, template ) {
+var $ = require('jquery');
+var Backbone = require('backbone');
+var template = require('../templates/item.hbs');
 
-    var modalItemView = Backbone.View.extend( {
+module.exports = Backbone.View.extend( {
 
-    tmpl: template,
+  tmpl: template,
 
-    initialize: function () {
-      backbone.on('item:click', this.handleItemClick.bind( this ) );
-    },
+  initialize: function () {
+    Backbone.on('item:click', this.handleItemClick.bind( this ) );
+  },
 
-    render: function ( model ) {
-      this.$el.empty().html( this.tmpl( model.toJSON() ) );
-      return this;
-    },
+  render: function ( model ) {
+    this.$el.empty().html( this.tmpl( model.toJSON() ) );
+    return this;
+  },
 
-    handleItemClick: function ( data ) {
-      this.render( this.collection.get( data.model ) );
+  handleItemClick: function ( data ) {
+    this.render( this.collection.get( data.model ) );
 
-      $.fancybox( {
-        content: this.$el,
-        modal: true,
-        hideOnContentClick: true,
-        showCloseButton: true
-      } );
+    $.fancybox( {
+      content: this.$el,
+      modal: true,
+      hideOnContentClick: true,
+      showCloseButton: true
+    } );
 
-      $( ".closeModal" ).click(function(){
-        $.fancybox.close();
-      } );
-    }    
-  } );
-
-  return modalItemView;
+    $( ".closeModal" ).click(function(){
+      $.fancybox.close();
+    } );
+  }    
 } );

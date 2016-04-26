@@ -1,12 +1,12 @@
 'use strict';
 
-define(['backbone'], function (backbone) {
-  return backbone.Model.extend({
-    defaults: {
-        title       : "Empty Item",
-        date        : null,
-        time        : null,
-        description : null
-      }
-  });
+var Backbone = require('backbone');
+
+module.exports = Backbone.Model.extend({
+  defaults: {
+      title       : "Empty Item",
+      date        : null,
+      time        : null,
+      description : null
+    }
 });

@@ -1,35 +1,27 @@
 'use strict';
 
-define(
-  [
-    'jquery',
-    'backbone',
-    'fancybox',
-  ], 
-  function ( $, backbone, Fancybox ) {
+var $ = require('jquery');
+var Backbone = require('backbone');
 
-    var modalItemView = Backbone.View.extend( {
+module.exports = Backbone.View.extend( {
 
-    initialize: function () {
-      $( '#aboutButton' ).click( this.handleAboutClick.bind( this ) );
-    },
+  initialize: function () {
+    $( '#aboutButton' ).click( this.handleAboutClick.bind( this ) );
+  },
 
-    handleAboutClick: function ( e ) {
+  handleAboutClick: function ( e ) {
 
-      e.preventDefault();
+    e.preventDefault();
 
-      $.fancybox( {
-        content: this.$el,
-        modal: true,
-        hideOnContentClick: true,
-        showCloseButton: true
-      } );
+    $.fancybox( {
+      content: this.$el,
+      modal: true,
+      hideOnContentClick: true,
+      showCloseButton: true
+    } );
 
-      $( ".closeModal" ).click(function(){
-        $.fancybox.close();
-      } );
-    }    
-  } );
-
-  return modalItemView;
+    $( ".closeModal" ).click(function(){
+      $.fancybox.close();
+    } );
+  }    
 } );
