@@ -8,6 +8,8 @@ import alt from './libs/alt';
 import storage from './libs/storage';
 import persist from './libs/persist';
 
+import items from '../../common/items.json';
+
 persist(alt, storage, 'app');
 
-ReactDOM.render( <App />, document.getElementById( 'app' ) );
+ReactDOM.render( <App items={items}/>, document.getElementById( 'app' ) );

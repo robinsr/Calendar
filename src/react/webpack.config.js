@@ -37,6 +37,10 @@ const common = {
             } 
         ],
         loaders: [ 
+            { 
+                test: /\.json$/,
+                loader: 'json' 
+            },
             {
                 // Test expects a RegExp! Note the slashes!
                 test: /\.css$/,
