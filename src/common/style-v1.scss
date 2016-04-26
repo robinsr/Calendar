@@ -7,7 +7,7 @@ html {
 body {
     margin:0;
     height: 100%;
-    background: url('../assets/bg.jpg') top center no-repeat #545454;
+    background: url('/common/img/bg.jpg') top center no-repeat #545454;
     font-family: Verdana,Tahoma,sans-serif;
 }
 .intro-box {
@@ -170,7 +170,7 @@ body {
     img {
         width: 36px;
         height: 36px;
-        background-image: url('../common/fancybox/fancybox_sprite.png');
+        background-image: url('/common/fancybox/fancybox_sprite.png');
     }
 
     a {

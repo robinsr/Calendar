@@ -41,7 +41,7 @@ $sticky-note-out: #777;
     overflow:hidden;
     text-indent:100%;
     white-space:nowrap;
-    background-image: url(../../../common/fancybox/fancybox_sprite.png);
+    background-image: url(/common/fancybox/fancybox_sprite.png);
     background-position: 100% -36px;
     background-repeat: no-repeat;
     transform: rotate( $angle );
@@ -210,7 +210,7 @@ $item-space: 0.25%;
 body {
     margin:0;
     height: 100%;
-    background: url('../assets/bg.jpg') top center no-repeat #545454;
+    background: url(/common/img/bg.jpg) top center no-repeat #545454;
     font-family: $body-font;
 }
 
