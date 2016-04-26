@@ -30,7 +30,6 @@
   },
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp": "^3.9.1",
     "gulp-browserify": "^0.5.1",
     "gulp-hub": "^0.7.1",
     "gulp-rename": "^1.2.2",
