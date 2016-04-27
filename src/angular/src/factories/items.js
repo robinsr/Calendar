@@ -1,7 +1,9 @@
 'use strict';
 
+var angular = require('angular');
+
 angular.module( 'calendar' ).factory( 'Items', [ '$resource', function ( $resource )  {
-  return $resource( '../data-store/:year/:month.json', {}, { 
+  return $resource( 'data-store/:year/:month.json', {}, { 
     query: {
       method: 'GET',
       params: {

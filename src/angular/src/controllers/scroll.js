@@ -1,5 +1,7 @@
 'use strict';
 
+var angular = require('angular');
+
 angular.module( 'calendar' ).controller( 'ScrollController', [
   '$scope', 
   '$rootScope', 

@@ -1,5 +1,9 @@
 'use strict';
 
+var $ = require('jquery');
+var angular = require('angular');
+var moment = require('moment');
+
 angular.module( 'calendar' ).directive( 'dropArea', function () {
   return { 
     link: function ( scope, elem ) { 
@@ -20,7 +24,7 @@ angular.module( 'calendar' ).directive( 'dropArea', function () {
         var data = e.originalEvent.dataTransfer.getData( 'calendar' );
         for (var i = 0; i < items.length; i++) {
           if ( items[i].$$hashKey === data ) {
-            items[i].date = day.date;
+            items[i].date = moment(day).format('M/D/YYYY');
             scope.$parent.$digest();
             break;
           }

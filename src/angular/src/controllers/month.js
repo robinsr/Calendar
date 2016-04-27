@@ -1,5 +1,8 @@
 'use strict';
 
+var angular = require('angular');
+var moment = require('moment');
+
 angular.module( 'calendar' ).controller( 'MonthController', [ 
   '$scope', 
   '$rootScope', 
@@ -13,7 +16,7 @@ angular.module( 'calendar' ).controller( 'MonthController', [
       month: $routeParams.month
     } ) );
 
-    $rootScope.pageTitle = $scope.pageTitle;
+    $rootScope.pageTitle = moment($scope.current).format('MMMM[, ]YYYY');
 
     $scope.items = Items.query( {
       year: $routeParams.year,
@@ -32,7 +35,7 @@ angular.module( 'calendar' ).controller( 'MonthController', [
 
       } else {
         $scope.itemDetail = null;
-        $rootScope.pageTitle = $scope.pageTitle;
+        $rootScope.pageTitle = moment($scope.current).format('MMMM[, ]YYYY');
       }
     }
 

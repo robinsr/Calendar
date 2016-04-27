@@ -1,5 +1,8 @@
 'use strict';
 
+var angular = require('angular');
+var moment = require('moment');
+
 angular.module( 'calendar' ).factory( 'Month', function () {
   return function ( params ) {
     var now = moment( [ params.month, '15', params.year ].join( '/' ), 'MM/DD/YYYY' );
