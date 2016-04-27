@@ -1,29 +1,30 @@
 'use strict'
 
-define(['lodash','knockout'], function (_, ko) {
-  return function dayViewModel(dayModel) {
-    var self = this;
+var ko = require('knockout');
+var _ = require('underscore');
 
-    self.day = ko.observable(dayModel.day)
-    self.month = ko.observable(dayModel.month)
-    self.year = ko.observable(dayModel.year)
+module.exports = function dayViewModel(dayModel) {
+  var self = this;
 
-    self.dateString = ko.observable(dayModel.displayMonth + "/" + dayModel.displayDay + "/" + dayModel.year);
+  self.day = ko.observable(dayModel.day)
+  self.month = ko.observable(dayModel.month)
+  self.year = ko.observable(dayModel.year)
 
-    self.displayDate = ko.observable(dayModel.day);
+  self.dateString = ko.observable(dayModel.displayMonth + "/" + dayModel.displayDay + "/" + dayModel.year);
 
-    var dayNames = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
-    ]
+  self.displayDate = ko.observable(dayModel.day);
 
-    self.dayName = ko.observable(dayNames[dayModel.day % 7]);
+  var dayNames = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ]
 
-    self.inCurrentMonth = ko.observable(dayModel.inCurrentMonth);
-  }
-})
+  self.dayName = ko.observable(dayNames[dayModel.day % 7]);
+
+  self.inCurrentMonth = ko.observable(dayModel.inCurrentMonth);
+};

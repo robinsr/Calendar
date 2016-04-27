@@ -29,6 +29,7 @@
     "fancybox": "^3.0.0",
     "grunt": "^0.4.5",
     "jquery": "^2.1.4",
+    "knockout": "^3.4.0",
     "moment": "^2.10.6",
     "underscore": "^1.8.3"
   },
