@@ -1,25 +1,26 @@
 'use strict';
 
-define(['backbone', 'models/item'], function (backbone, Item) {
-  return backbone.Collection.extend({
+var Backbone = require('backbone');
+var Item = require('../models/item');
 
-    model: Item,
+module.exports =  Backbone.Collection.extend({
 
-    url: '/common/items.json',
+  model: Item,
 
-    initialize: function () {
-      // Setup event listener to handle drop events.
-      // Finds the dropped event and updates its date model property
-      backbone.on( 'item:drop', function ( data ) {
-        var droppedItem = this.get( data.model );
+  url: '/common/data/items.json',
 
-        if ( !droppedItem ) {
-          return;
-        }
+  initialize: function () {
+    // Setup event listener to handle drop events.
+    // Finds the dropped event and updates its date model property
+    Backbone.on( 'item:drop', function ( data ) {
+      var droppedItem = this.get( data.model );
 
-        droppedItem.set( 'date', data.newDate );
-      }.bind( this ) );
-    }
+      if ( !droppedItem ) {
+        return;
+      }
 
-  });
+      droppedItem.set( 'date', data.newDate );
+    }.bind( this ) );
+  }
+
 });

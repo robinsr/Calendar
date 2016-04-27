@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html ng-app="calendar" class="angular">
+
+<!--
+
+    Developer: Ryan Robinson
+    Date: 10/03/2015
+    Contact: ryan.b.robinson@gmail.com
+    Github: https://github.com/robinsr/Calendar.git
+
+    Copyright 2013
+
+-->
+
+    <head>
+        <title ng-bind="pageTitle + ' | AngularJS Calendar'"></title>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="/common/css/style-v2.css" type="text/css" media="screen"/>
+        <link rel="stylesheet" href="/common/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+    </head>
+    <body>
+        <div id="wrap">
+            <div id="container">
+                <div class="aspect-container">
+                    <div class="aspect-content" ng-view></div>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <a href="http://robinsr.github.io/">Back to Demos</a>
+            <a href="javascript:;" id="aboutButton">About</a>
+        </div>
+    
+        <script src="build/bundle.js"></script>
+    </body>
+</html>

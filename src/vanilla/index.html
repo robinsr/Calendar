@@ -14,20 +14,20 @@
 
     <head>
         <title>CSV to Calendar</title>
-        <script type="text/javascript" src="../common/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script type="text/javascript" src="../common/fancybox/jquery.fancybox.js"></script>
         <script src="script.js"></script>
         <link rel="stylesheet" href="../common/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
-        <link rel="stylesheet" href="../common/style.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="../common/css/style-v1.css" type="text/css" media="screen" />
     </head>
     <body>
         <div id="wrap">
             <div id="buttonControls">
-                <img src="../common/fancybox/blank.gif" id="decrementMonthButton" />
+                <img src="/common/fancybox/blank.gif" id="decrementMonthButton" />
                 <div id="tableCaptionWrap">
                     <p id="tableCaption"></p>
                 </div>
-                <img src="../common/fancybox/blank.gif" id="incrementMonthButton" />
+                <img src="/common/fancybox/blank.gif" id="incrementMonthButton" />
             </div>
             <div id="calendar"></div>
             <div id="eventDetails" style="display:none;"></div>
@@ -62,7 +62,7 @@
             });
 
             $.ajax({
-                url: '../common/items.json',
+                url: '/common/data/items.json',
                 type: 'get',
                 error: function(data){
                     calendar.parseCSV(true);
