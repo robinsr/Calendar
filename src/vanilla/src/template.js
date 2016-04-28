@@ -42,7 +42,7 @@ const html = (literalSections, ...substs) => {
 
 const calendar = data => html`
   ${controls(data)}
-  <ul id="calendar" class="weeks-${data.weekCount}">
+  <ul id="calendar" class="full-width weeks-${data.weekCount}">
     ${header()}
     ${data.days.map(data => day(data))}
   </ul>
@@ -63,7 +63,7 @@ const controls = data => {
 };
 
 const day = data => html`
-  <li class="day ${data.isInMonthRange?'this-month':'other-month'}" data-iso="${data.iso}">
+  <li class="day ${data.isInMonthRange?'this-month':'other-month'} in" data-iso="${data.iso}">
     <p class="date">${ moment(data.iso).format('D') }</p>
     <ul>${data.appointments.map(appt => html`
       <li class="item" draggable="true" data-key="${appt.id}">${appt.title}</li>`)}</ul>

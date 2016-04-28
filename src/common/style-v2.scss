@@ -1,5 +1,6 @@
 // Google Font
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css);
 
 $body-font: 'Open Sans', sans-serif;
 $stick-note-in: #efe0a5;
@@ -130,6 +131,10 @@ $item-space: 0.25%;
             height: 90%;
             display: flex;
             flex-wrap: wrap;
+
+            &.full-width {
+                width: 100%;
+            }
 
             .day,
             .header {

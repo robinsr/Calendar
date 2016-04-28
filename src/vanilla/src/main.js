@@ -21,8 +21,7 @@ const app = new App();
 
 const setView = () => {
   app.controller.setView(document.location.hash);
-  app.view.render();
 }
 
 $on(window, 'load', setView);
-$on(window, 'hashChange', setView);
+$on(window, 'hashchange', setView);

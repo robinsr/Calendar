@@ -2,12 +2,15 @@
  * Handles dom events and rendering
  */
 
-import { qs } from './util';
-import {  calendar } from './template';
+import { $delegate, qs } from './util';
+import { calendar } from './template';
+import { EventEmitter } from './util';
 
-export default class View {
+export default class View extends EventEmitter {
     constructor() {
-        this._elem = qs('#target');
+      super();
+      this._elem = qs('#target');
+      this.delegateEvents();
     }
 
     /**
@@ -21,18 +24,30 @@ export default class View {
 
     }
 
-    render() {
-
-      this._elem.innerHTML = calendar({
-        iso: '2016-04-27T21:24:59.065Z',
-        days:[{
-          iso: '2016-04-27T21:24:59.065Z',
-          appointments: [{
-            title: 'Some appointment1',
-          }, {
-            title: 'Some other appointment'
-          }]
-        }]
+    delegateEvents() {
+      let elem = qs('#target');
+      $delegate(elem, '.item', 'click', e => {
+        // todo show modal
       });
+
+      $delegate(elem, '.item', 'dragstart', e => {
+        this.trigger('dragstart', e);
+      });
+
+      $delegate(elem, '.day', 'dragover', e => {
+        e.preventDefault();
+      } );
+
+      $delegate(elem, '.day', 'dragenter', e => {
+        e.preventDefault();
+      } );
+
+      $delegate(elem, '.day', 'drop', (e) => {
+        this.trigger('drop', e);
+      });
+    }
+
+    render(data) {
+      this._elem.innerHTML = calendar(data);
     }
 };
