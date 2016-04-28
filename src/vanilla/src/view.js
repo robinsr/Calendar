@@ -3,51 +3,68 @@
  */
 
 import { $delegate, qs } from './util';
-import { calendar } from './template';
+import { about, calendar, details } from './template';
 import { EventEmitter } from './util';
 
 export default class View extends EventEmitter {
     constructor() {
       super();
-      this._elem = qs('#target');
+      this._tar = qs('#target');
+      this._body = qs('body');
+      this._modalOverlay = qs('#modal-overlay');
+      this._modalContent = qs('#modal-content', this._modalOverlay)
       this.delegateEvents();
     }
 
-    /**
-     * Attaches a handler to a view event
-     * 
-     * @param  {string} ev      event name
-     * @param  {func} handler function to bind
-     * @return {null}
-     */
-    bind(ev, handler) {
+    delegateEvents() {
 
+      const {_tar, _modalOverlay, _body} = this;
+
+      $delegate(_tar, '.item', 'click', e => {
+        this.trigger('itemClick', e);
+      });
+
+      $delegate(_tar, '.item', 'dragstart', e => {
+        this.trigger('itemDrag', e);
+      });
+
+      $delegate(_tar, '.day', 'dragover', e => {
+        e.preventDefault();
+      } );
+
+      $delegate(_tar, '.day', 'dragenter', e => {
+        e.preventDefault();
+      } );
+
+      $delegate(_tar, '.day', 'drop', e => {
+        this.trigger('itemDrop', e);
+      });
+
+      $delegate(_modalOverlay, '.close', 'click', e => {
+        e.preventDefault();
+        this.hideItemModal();
+      });
+
+      $delegate(_body, '#aboutButton', 'click', e => {
+        this.showAboutModal(); 
+      })
     }
 
-    delegateEvents() {
-      let elem = qs('#target');
-      $delegate(elem, '.item', 'click', e => {
-        // todo show modal
-      });
+    showAboutModal() {
+      this._modalContent.innerHTML = about();
+      this._modalOverlay.classList.add('in');
+    }
 
-      $delegate(elem, '.item', 'dragstart', e => {
-        this.trigger('dragstart', e);
-      });
+    showItemModal(data) {
+      this._modalContent.innerHTML = details(data);
+      this._modalOverlay.classList.add('in');
+    }
 
-      $delegate(elem, '.day', 'dragover', e => {
-        e.preventDefault();
-      } );
-
-      $delegate(elem, '.day', 'dragenter', e => {
-        e.preventDefault();
-      } );
-
-      $delegate(elem, '.day', 'drop', (e) => {
-        this.trigger('drop', e);
-      });
+    hideItemModal() {
+      this._modalOverlay.classList.remove('in');
     }
 
     render(data) {
-      this._elem.innerHTML = calendar(data);
+      this._tar.innerHTML = calendar(data);
     }
 };

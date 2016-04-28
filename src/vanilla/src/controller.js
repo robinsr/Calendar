@@ -11,8 +11,9 @@ export default class Controller {
 
     $on(this.model, 'sync', this.render.bind(this));
     $on(this.model, 'update', this.render.bind(this));
-    $on(this.view, 'dragstart', this.onDrag.bind(this));
-    $on(this.view, 'drop', this.onDrop.bind(this));
+    $on(this.view, 'itemDrag', this.onDrag.bind(this));
+    $on(this.view, 'itemDrop', this.onDrop.bind(this));
+    $on(this.view, 'itemClick', this.onClick.bind(this));
   }
 
   setView(hash) {
@@ -44,8 +45,9 @@ export default class Controller {
     e.dataTransfer.setData('calendar', e.target.dataset.key);
   }
 
-  onItemClick() {
-
+  onClick(e) {
+    const key = e.target.dataset.key;
+    this.view.showItemModal(this.model.getAppt(key));
   }
 
   onIncClick(e) {

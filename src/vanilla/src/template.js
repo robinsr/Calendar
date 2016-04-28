@@ -77,10 +77,19 @@ const details = data => html`
     <p class="eventDetailsItem">time:</p> <span>${data.time}</span><br>
     <p class="eventDetailsItem">description:</p><span>${data.description}</span><br>
     <div class="closeModal">
-        <p><a>click here to close</a></p>
+      <p><a class="close">click here to close</a></p>
     </div>
   </div>
 `;
+
+const about = () => `
+  <div id="about">
+    <p><a href="https://github.com/robinsr/Calendar/tree/master/src/vanilla">source</a></p>
+    <div class="closeModal">
+      <p><a class="close">click here to close</a></p>
+    </div>
+  </div>
+`
 
 const header = () => {
   const m = moment();
@@ -88,4 +97,4 @@ const header = () => {
     <li class="header">${m.day(n).format('dddd')}</li>`)}`;
 };
 
-export { controls, calendar };
+export { about, calendar, details };
