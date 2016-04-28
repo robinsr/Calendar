@@ -1,7 +1,6 @@
 'use strict';
 
 var gulp = require('gulp');
-var watch = require('gulp-watch');
 var browserify = require('gulp-browserify');
 var rename = require('gulp-rename');
 var hbsfy = require('hbsfy');
@@ -16,8 +15,4 @@ gulp.task('default', function (done) {
   .pipe(browserify(bOpts))
   .pipe(rename('bundle.js'))
   .pipe(gulp.dest('./build'))
-});
-
-gulp.task('watch', function () {
-  return watch('./src/**/*.js', ['default']);
 });
