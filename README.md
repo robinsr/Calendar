@@ -1,36 +1,48 @@
+
 Calendar
 ========
 
-App to convert Excel CSV to web calendar
+A Simple web calendar in the vein of TodoMVC
 
 See the demo: https://robinsr-calendar.herokuapp.com/
 
-Update: 9/26/2015
-
 I want to remake this app using various technologies/frameworks to showcase
-the differences in implementation between them. For now, I plan to remake the
-app in three ways
-
-* Vanila JS using an object-oriented approach
-* Knockout.js with require.js
-* Backbone with require
+the differences in implementation between them. 
 
 The basic requirements for each version are as follows:
 
-* Render a calendar:
-    * Days should be numbered correctly
-    * Days in the month should be yellow, while days outside of the month are gray
-    * Days should show events that happen on that day
+* Should render
+* It should look nice
+* Days should be numbered correctly
+* Days in the month should be visually distinct from leading/trailing days
+* Days should list events that happen on that day
+* Clicking an event shows a detail modal
+* Dragging an event to a different day moves the event and updates the event details
 
-* Interaction
-    * Clicking an event shows a detail modal
-    * Dragging an event to a different day moves the event and updates the event details
+Extras:
+
+* It should look _really_ nice, and have animations
+* It should be modular with some sort of build system
+* It should have some sort of URL routing
+* It should have tests
+* It should load events from a service
+* It should persist changes to events
+* It should allow additional events to be added
+
+|         | vanilla | backbone | angular | react   |
+|---------|---------|----------|---------|---------|
+| build   | none    | requie   | none    | webpack |
+| routing |         |          | √       |         |
+| service |         |          | √       |         |
+|         |         |          |         |         |
 
 TODOS
 
+* ~~Vanilla~~ 
 * ~~Backbone~~
-* Angular
+* ~~Angular~~
 * Ember
-* React/Flux
+* ~~React/Flux~~
 * web components
+* Vanilla ES2015
 
