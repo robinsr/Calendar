@@ -1,5 +1,9 @@
 // Google Font
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css);
+
+// todo. icons for source link
+//@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css);
 
 $body-font: 'Open Sans', sans-serif;
 $stick-note-in: #efe0a5;
@@ -130,6 +134,10 @@ $item-space: 0.25%;
             height: 90%;
             display: flex;
             flex-wrap: wrap;
+
+            &.full-width {
+                width: 100%;
+            }
 
             .day,
             .header {
@@ -300,7 +308,26 @@ body {
     }
 }
 
+#modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0,0,0,.5);
+    display: none;
+    transition: opacity 400ms;
 
+    &.in {
+        display: flex;
+    }
 
-
-
+    #modal-content {
+        width: 320px;
+        background: $stick-note-in;
+        margin: auto;
+        border-radius: 4px;
+        box-shadow: 2px 2px 7px rgba(0,0,0,.5);
+        padding: 4px;
+    }
+}

@@ -6,6 +6,7 @@ gulp.task('default', function () {
     './src/common/gulpfile.js',
     './src/backbone/gulpfile.js',
     './src/knockout/gulpfile.js',
-    './src/angular/gulpfile.js'
+    './src/angular/gulpfile.js',
+    './src/vanilla/gulpfile.js'
   ]);
 })

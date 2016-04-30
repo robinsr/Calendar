@@ -22,19 +22,15 @@ The basic requirements for each version are as follows:
 Extras:
 
 * It should look _really_ nice, and have animations
-* It should be modular with some sort of build system
 * It should have some sort of URL routing
 * It should have tests
 * It should load events from a service
 * It should persist changes to events
 * It should allow additional events to be added
 
-|         | vanilla | backbone | angular | react   |
-|---------|---------|----------|---------|---------|
-| build   | none    | requie   | none    | webpack |
-| routing |         |          | √       |         |
-| service |         |          | √       |         |
-|         |         |          |         |         |
+Builds:
+
+There is a lot of shared build logic in `/febs` and each version's gulp file simply configures the build system to transform files in a certain way. Each build is based on browserify. There is both a prod and dev bundle tasks. 
 
 TODOS
 
@@ -44,5 +40,7 @@ TODOS
 * Ember
 * ~~React/Flux~~
 * web components
-* Vanilla ES2015
+* ~~Vanilla ES2015~~
+* CRUD service
+* SSR only 
 
