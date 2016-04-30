@@ -3,7 +3,7 @@
  */
 
 import moment from 'moment';
-import uuid from 'node-uuid';
+import uuid from 'uuid-v4';
 import { EventEmitter } from './util';
 
 export default class Model extends EventEmitter {
@@ -14,7 +14,7 @@ export default class Model extends EventEmitter {
     this.items = [];
 
     service.getItems().then(items => {
-      this.items = items.map(item => Object.assign(item, {id: uuid.v4()}));
+      this.items = items.map(item => Object.assign(item, {id: uuid()}));
       this.trigger('sync');
     })
   }
