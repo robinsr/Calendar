@@ -3,23 +3,35 @@
 var gulp = require('gulp');
 var browserify = require('browserify');
 var babelify = require('babelify');
+var uglify = require('gulp-uglify');
+var buffer = require('vinyl-buffer');
 var source = require('vinyl-source-stream');
 
-var bOpts = {
-  debug: process.env.NODE_ENV === 'development'
-};
-
-gulp.task('default', function (done) {
-  return browserify('./src/main.js', bOpts)
+gulp.task('compile-js:dev', function (done) {
+  return browserify('./src/main.js', {debug:true})
   .transform(babelify, {
     presets: ['es2015'],
-    sourceMaps: bOpts.debug
+    sourceMaps: true
   })
   .bundle()
   .pipe(source('bundle.js'))
   .pipe(gulp.dest('./build'))
 });
 
-gulp.task('watch', function () {
-  return gulp.watch('./src/**/*.js', ['default']);
+gulp.task('compile-js:prod', function (done) {
+  return browserify('./src/main.js', {debug:false})
+  .transform(babelify, {
+    presets: ['es2015']
+  })
+  .bundle()
+  .pipe(source('bundle.js'))
+  .pipe(buffer())
+  .pipe(uglify())
+  .pipe(gulp.dest('./build'))
 });
+
+gulp.task('watch', function () {
+  return gulp.watch('./src/**/*.js', ['compile-js:dev']);
+});
+
+gulp.task('default', ['compile-js:prod'])
