@@ -1,17 +1,14 @@
 import AltContainer from 'alt-container';
 import React from 'react';
-import {DragDropContext} from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
+
 
 import Lanes from './Lanes.jsx';
 import LaneActions from '../actions/LaneActions';
 import LaneStore from '../stores/LaneStore';
 import Days from './Days.jsx';
 import moment from 'moment';
-import items from '../'
 import getDays from '../libs/days';
 
-@DragDropContext(HTML5Backend)
 export default class App extends React.Component {
   constructor ( props ) {
     super( props );

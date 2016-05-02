@@ -1,18 +1,7 @@
 import React from 'react';
 import {ModalContainer, ModalDialog} from 'react-modal-dialog';
-import {DragSource, DropTarget} from 'react-dnd';
 import ItemTypes from '../constants/itemTypes';
 
-const appTSource = {
-  beginDrag(props) {
-    return { id: props.id };
-  }
-};
-
-@DragSource(ItemTypes.APPT, appTSource, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  isDragging: monitor.isDragging()
-}))
 export default class Appointment extends React.Component {
   state = {
     isShowingModal: false,
@@ -20,9 +9,9 @@ export default class Appointment extends React.Component {
   handleClick = () => this.setState({isShowingModal: true})
   handleClose = () => this.setState({isShowingModal: false})
   render() {
-    const {connectDragSource, data} = this.props;
+    const {data} = this.props;
 
-    return connectDragSource(<div onClick={this.handleClick}>
+    return <div onClick={this.handleClick}>
       <span>{data.title}</span>
       {
         this.state.isShowingModal &&
@@ -35,6 +24,6 @@ export default class Appointment extends React.Component {
           </ModalDialog>
         </ModalContainer>
       }
-    </div>);
+    </div>;
   }
 }

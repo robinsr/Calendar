@@ -14,6 +14,13 @@ module.exports = function (opts) {
     });
   }
 
+  if (opts.react) {
+    bsfy.transform(babelify, {
+      presets: ['es2015', 'react'],
+      plugins: ['transform-class-properties']
+    });
+  }
+
   if (opts.angular) {
     bsfy.transform(ngHtml2Js({
       module: 'calendar',
@@ -22,7 +29,7 @@ module.exports = function (opts) {
   }
 
   if (opts.hbs) {
-    bsfy.transform(hbsfy)
+    bsfy.transform(hbsfy);
   }
 
   return bsfy;
