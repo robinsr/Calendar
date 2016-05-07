@@ -18,7 +18,7 @@ module.exports = function (opts) {
   });
 
   return bsfy(opts)
-    .add(opts.src, {debug: opts.sourceMaps})
+    .add(opts.src)
     .bundle()
     .pipe(source('bundle.js'))
     .pipe(buffer())
