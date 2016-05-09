@@ -10,29 +10,13 @@ export default class Model extends EventEmitter {
   constructor(service) {
     super();
 
-   this.now= moment().day(15);
+    this.now = moment().day(15);
     this.items = [];
 
     service.getItems().then(items => {
       this.items = items.map(item => Object.assign(item, {id: uuid()}));
       this.trigger('sync');
     })
-  }
-
-  addEventListener(type, func) {
-    if (this._cb[ type ]) {
-      this._cb[ type ].handlers.push(func);
-    } else {
-      this._cb[ type ] = {
-        handlers: [ func ]
-      }
-    }
-  }
-
-  trigger(type, data) {
-    if (this._cb[ type ]) {
-      this._cb[ type ].handlers.forEach(handle => handle())
-    }
   }
 
   moveAppointment(key, date) {
