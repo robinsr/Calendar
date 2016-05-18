@@ -5,10 +5,6 @@
 // todo. icons for source link
 //@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css);
 
-$body-font: 'Open Sans', sans-serif;
-$stick-note-in: #efe0a5;
-$sticky-note-out: #777;
-
 @mixin sticky-note() {
     border-radius: 3px;
     border-bottom-right-radius: 0px;
@@ -73,14 +69,21 @@ $sticky-note-out: #777;
     }
 }
 
+// LAYOUT
+$item-space: 0.25%;
+
+* {
+    box-sizing: border-box;
+}
 
 html {
     height: 100%;
 }
 
-// LAYOUT
-
-$item-space: 0.25%;
+body {
+    margin:0;
+    height: 100%;
+}
 
 #wrap {
     height: 100%;
@@ -139,18 +142,15 @@ $item-space: 0.25%;
                 width: 100%;
             }
 
-            .day,
             .header {
                 width: ( 100% - ( 14 * $item-space ) ) * 1/7;
-            }
-
-            .header {
                 margin: 0 $item-space;
                 height: 5%;
             }
 
             .day {
                 margin: $item-space;
+                width: ( 100% - ( 12 * $item-space ) ) * 1/7;
 
                 // top
                 &:nth-child(n+7):nth-child(-n+14) {
@@ -173,22 +173,17 @@ $item-space: 0.25%;
                 }
             }
 
-            &.weeks-4 .day {
-                height: ( 95% - ( 14 * $item-space ) ) * 1/4;
-            }
-
-            &.weeks-5 .day {
-                height: ( 95% - ( 14 * $item-space ) ) * 1/5;
-            }
-
-            &.weeks-6 .day {
-                height: ( 95% - ( 14 * $item-space ) ) * 1/6;
+            @for $i from 4 through 6 {
+                &.weeks-#{$i} .day {
+                    height: ( 95% - ( ( $i - 1 ) * $item-space * 4) ) * 1/#{$i};
+                }
             }
         }
 
         #list {
             width: 30%;
             height: 85% + ( $item-space * 2 );
+            padding-left: $item-space;
 
             .scroll-end {
                 height: 10%;
@@ -212,12 +207,13 @@ $item-space: 0.25%;
 }
 
 // PRETTIES
+$body-font: 'Open Sans', sans-serif;
+$stick-note-in: #efe0a5;
+$sticky-note-out: #777;
 
 @include scrollbars(.5em, #545454);
 
 body {
-    margin:0;
-    height: 100%;
     background: url(/common/img/bg.jpg) top center no-repeat #545454;
     font-family: $body-font;
 }
