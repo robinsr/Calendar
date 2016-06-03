@@ -21,14 +21,15 @@ angular.module( 'calendar' ).directive( 'dropArea', function () {
       } );
 
       $elem.on( 'drop', function ( e ) {
-        var data = e.originalEvent.dataTransfer.getData( 'calendar' );
-        for (var i = 0; i < items.length; i++) {
-          if ( items[i].$$hashKey === data ) {
-            items[i].date = moment(day).format('M/D/YYYY');
-            scope.$parent.$digest();
-            break;
-          }
-        };
+        var itemId = e.originalEvent.dataTransfer.getData( 'calendar' );
+        scope.moveAppointment(itemId, moment(day).format('M/D/YYYY'))
+        // for (var i = 0; i < items.length; i++) {
+        //   if ( items[i].$$hashKey === data ) {
+        //     items[i].date = ;
+        //     scope.$parent.$digest();
+        //     break;
+        //   }
+        // };
       } );
     }
   };
