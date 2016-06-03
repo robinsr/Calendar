@@ -9,6 +9,12 @@ const Appointment = mongoose.model('Appointment');
 const agent = supertest.agent(app);
 const acceptHeader = ['Accept', 'application/json'];
 
+const responseOk = (appt1, appt2) => {
+  const msg = 'No appointment returned';
+  assert.ok(appt1, msg);
+  assert.ok(appt2, msg);
+};
+
 const apptOk = appt => {
   assert.equal(appt.title, 'Test Appointment');
   assert.equal(appt.description, 'This exists for testing only');
@@ -43,6 +49,7 @@ describe('Express server', () => {
         .expect(res => {
           const firstApp = res.body[0]
           const lastApp = res.body[res.body.length - 1];
+          responseOk(firstApp, lastApp);
           apptOk(firstApp);
           monthMatch(firstApp, month);
           apptOk(lastApp);
@@ -61,6 +68,7 @@ describe('Express server', () => {
         .expect(res => {
           const firstApp = res.body[0]
           const lastApp = res.body[res.body.length - 1];
+          responseOk(firstApp, lastApp);
           apptOk(firstApp);
           apptOk(lastApp);
         })
@@ -79,6 +87,7 @@ describe('Express server', () => {
         .expect(res => {
           const firstApp = res.body[0]
           const lastApp = res.body[res.body.length - 1];
+          responseOk(firstApp, lastApp);
           apptOk(firstApp);
           monthMatch(firstApp, month);
           apptOk(lastApp);

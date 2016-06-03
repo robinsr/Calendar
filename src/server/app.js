@@ -6,6 +6,15 @@ const jsonParser = require('body-parser').json();
 
 if (!process.env.MONGO_URL) throw new Error('App requires env var MONGO_URL');
 
+const serializeOpts = {
+  virtuals: true,
+  transform: function (doc, ret, options) {
+    // remove the _id of every document before returning the result
+    delete ret._id;
+    delete ret.datetime;
+  }
+};
+
 // Mongoose appointment schema setup
 const AppointmentSchema = new mongoose.Schema({
   datetime: { type: Date },
@@ -13,7 +22,7 @@ const AppointmentSchema = new mongoose.Schema({
   description: { type: String }
 }, {
   toObject: { virtuals: true },
-  toJSON: { virtuals: true }
+  toJSON: serializeOpts
 });
 
 
