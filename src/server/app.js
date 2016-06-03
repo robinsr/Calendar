@@ -4,6 +4,8 @@ const moment = require('moment');
 const path = require('path');
 const jsonParser = require('body-parser').json();
 
+const consts = require('./consts');
+
 if (!process.env.MONGO_URL) throw new Error('App requires env var MONGO_URL');
 
 const serializeOpts = {
@@ -28,17 +30,25 @@ const AppointmentSchema = new mongoose.Schema({
 
 AppointmentSchema.virtual('date')
   .get(function() {
-    return moment(this.datetime).format('M/D/YYYY');
+    return moment(this.datetime).format(consts.DATE);
+  })
+  .set(function (date) {
+    const {time} = this;
+    this.datetime = moment(`${date} ${time}`, consts.DATETIME).toDate();
   });
 
 AppointmentSchema.virtual('time')
   .get(function() {
-    return moment(this.datetime).format('h:mm:ss A');
+    return moment(this.datetime).format(consts.TIME);
+  })
+  .set(function (time) {
+    const {date} = this;
+    this.datetime = moment(`${date} ${time}`, consts.DATETIME).toDate();
   });
 
 AppointmentSchema.pre('save', function(next) {
   const { date, time } = this;
-  this.datetime = moment(`${date} ${time}`, 'M/D/YYYY h:mm:ss A').toDate();
+  this.datetime = moment(`${date} ${time}`, consts.DATETIME).toDate();
   next();
 });
 
@@ -61,6 +71,19 @@ AppointmentSchema.statics.findAll = function () {
     .sort({ datetime: -1 })
     .exec();
 };
+
+AppointmentSchema.statics.update = function (id, newData) {
+  return new Promise((resolve, reject) => {
+    this.findById(id, function (err, doc) {
+      if (err) return reject(err);
+      if (!doc) return reject(new Error('Doc not found'));
+      Object.assign(doc, newData);
+      doc.save(function (err) {
+        err ? reject(err) : resolve(doc);
+      });
+    });
+  });
+}
 
 const Appointment = mongoose.model('Appointment', AppointmentSchema);
 
@@ -103,8 +126,8 @@ const handleItemsQuery = (query, res) => {
 };
 
 app.get('/appointments/:year/:month', (req, res) => {
-  const { year, month } = req.params;
-  handleItemsQuery(Appointment.findByMonth(year, month), res);
+  let { year, month } = req.params;
+  handleItemsQuery(Appointment.findByMonth(year, --month), res);
 });
 
 app.get('/appointments', (req, res) => {
@@ -117,10 +140,13 @@ app.get('/appointments/all', (req, res) => {
   handleItemsQuery(Appointment.findAll(), res);
 });
 
-app.put('/appointments/:id', jsonParser, (req, res) => {
-  const query = { _id: req.params.id };
-  const opts = { runValidators: true };
-  handleItemsQuery(Appointment.findOneAndUpdate(query, req.body, opts).then(), res);
+app.post('/appointments/:id', jsonParser, (req, res) => {
+  Appointment.update(req.params.id, req.body)
+  .then(items => res.json(items))
+  .catch(err => {
+    console.error(err);
+    return res.status(500).json(err);
+  });
 });
 
 // Assume 404 since no middleware responded
