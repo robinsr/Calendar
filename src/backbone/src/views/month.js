@@ -15,7 +15,7 @@ module.exports = Backbone.View.extend( {
     this.model.bind( 'change:date', this.changeMonth, this );
 
     this.model.attributes.items.bind( 'change:date', this.updateItems, this );
-    this.model.attributes.items.bind( 'sync', this.changeMonth, this );
+    this.model.attributes.items.bind( 'reset', this.changeMonth, this );
 
     this.$monthBody = this.$el.find( '#month-body' );
     this.$monthName = this.$el.find( '#month-name' );

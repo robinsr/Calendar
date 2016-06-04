@@ -23,6 +23,12 @@ angular.module( 'calendar' ).controller( 'MonthController', [
       month: $routeParams.month
     } );
 
+    $scope.moveAppointment = function (id, date) {
+      let item = $scope.items.find(i => i.id == id);
+      item.date = date;
+      item.$save();
+    };
+
     function setItemDetail () {
       if ( $routeParams.item ) {
         $scope.itemDetail = $scope.items.filter( function ( item ) {

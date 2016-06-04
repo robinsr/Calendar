@@ -4,9 +4,8 @@ var gulp = require('gulp');
 var febs = require('../../febs');
 
 var buildOpts = {
+  es6: true,
   hbs: true
 };
 
-gulp.task('default', function () {
-  return febs.buildProdBundle(buildOpts)
-});
+febs.addTasks(buildOpts);

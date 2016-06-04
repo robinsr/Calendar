@@ -41,6 +41,6 @@ TODOS
 * ~~React/Flux~~
 * web components
 * ~~Vanilla ES2015~~
-* CRUD service
+* ~~CRUD service~~
 * SSR only 
 

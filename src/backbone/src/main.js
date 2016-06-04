@@ -47,4 +47,4 @@ var about = new AboutModal( {
   el: '#about'
 } );
 
-items.fetch();
+items.fetchInitial();

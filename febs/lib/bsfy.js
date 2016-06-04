@@ -6,7 +6,9 @@ var hbsfy = require('hbsfy');
 var babelify = require('babelify');
 
 module.exports = function (opts) {
-  var bsfy = browserify();
+  var bsfy = browserify({
+    debug: opts.sourceMaps
+  });
 
   if (opts.es6) {
     bsfy.transform(babelify, {
