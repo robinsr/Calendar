@@ -125,6 +125,15 @@ const handleItemsQuery = (query, res) => {
     });
 };
 
+const handleUpdateOrCreate = (req, res) => {
+  Appointment.update(req.params.id, req.body)
+  .then(items => res.json(items))
+  .catch(err => {
+    console.error(err);
+    return res.status(500).json(err);
+  });
+};
+
 app.get('/appointments/:year/:month', (req, res) => {
   let { year, month } = req.params;
   handleItemsQuery(Appointment.findByMonth(year, --month), res);
@@ -140,14 +149,8 @@ app.get('/appointments/all', (req, res) => {
   handleItemsQuery(Appointment.findAll(), res);
 });
 
-app.post('/appointments/:id', jsonParser, (req, res) => {
-  Appointment.update(req.params.id, req.body)
-  .then(items => res.json(items))
-  .catch(err => {
-    console.error(err);
-    return res.status(500).json(err);
-  });
-});
+app.post('/appointments/:id', jsonParser, handleUpdateOrCreate);
+app.put('/appointments/:id', jsonParser, handleUpdateOrCreate);
 
 // Assume 404 since no middleware responded
 app.use((req, res, next) => {

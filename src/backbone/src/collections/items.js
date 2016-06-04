@@ -7,20 +7,28 @@ module.exports =  Backbone.Collection.extend({
 
   model: Item,
 
-  url: '/common/data/items.json',
+  url: '/appointments/all',
 
   initialize: function () {
     // Setup event listener to handle drop events.
     // Finds the dropped event and updates its date model property
-    Backbone.on( 'item:drop', function ( data ) {
+    Backbone.on( 'item:drop', ( data ) => {
       var droppedItem = this.get( data.model );
 
       if ( !droppedItem ) {
         return;
       }
 
-      droppedItem.set( 'date', data.newDate );
-    }.bind( this ) );
+      droppedItem.set( 'date', data.newDate ).save();
+    });
+  },
+
+  fetchInitial: function () {
+    this.sync( 'read', this, {
+      success: ( resp ) => {
+        this.reset( resp );
+      }
+    });
   }
 
 });
