@@ -9,11 +9,12 @@ export default class Days extends React.Component {
 
   render() {
     const days = this.props.days;
+    let classNames = 'full-width';
 
     return (
-      <div>{days.map(day =>
+      <ul id="calendar" className={classNames} >{days.map(day =>
         <Day data={day} key={day.moment.toISOString()} />
-      )}</div>
+      )}</ul>
     );
   }
 }

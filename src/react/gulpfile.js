@@ -8,8 +8,4 @@ var buildOpts = {
   src: './src/index.jsx'
 };
 
-gulp.task('compile-js:dev', function () {
-  return febs.buildDevBundle(buildOpts)
-});
-
-gulp.task('default', ['compile-js:dev']);
+febs.addTasks(buildOpts);

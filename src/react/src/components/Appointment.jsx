@@ -11,7 +11,7 @@ export default class Appointment extends React.Component {
   render() {
     const {data} = this.props;
 
-    return <div onClick={this.handleClick}>
+    return <li onClick={this.handleClick}>
       <span>{data.title}</span>
       {
         this.state.isShowingModal &&
@@ -24,6 +24,6 @@ export default class Appointment extends React.Component {
           </ModalDialog>
         </ModalContainer>
       }
-    </div>;
+    </li>;
   }
 }

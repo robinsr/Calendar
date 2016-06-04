@@ -14,7 +14,7 @@ module.exports = function (buildOpts) {
   });
 
   gulp.task('watch', function () {
-    return gulp.watch('./src/**/*.js', ['compile-js:dev']);
+    return gulp.watch('./src/**/*.{js,jsx}', ['compile-js:dev']);
   });
 
   gulp.task('default', ['compile-js:prod']);

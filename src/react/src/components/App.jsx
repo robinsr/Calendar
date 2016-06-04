@@ -55,10 +55,12 @@ export default class App extends React.Component {
 
   render () {
     return (
-      <div>
-        <button className="add-Lane" onClick={this.decrementMonth}>-</button>
-        <span>{this.state.monthName}, {this.state.yearName}</span>
-        <button className="" onClick={this.incrementMonth}>+</button>
+      <div className="aspect-content">
+        <div id="controls">
+          <a className="item" href="#" onClick={this.decrementMonth}>-</a>
+          <a className="item" >{this.state.monthName}, {this.state.yearName}</a>
+          <a className="item" href="#" onClick={this.incrementMonth}>+</a>
+        </div>
         <Days days={this.state.days}/>
       </div>
       );

@@ -18,14 +18,15 @@ export default class Day extends React.Component {
 
   render() {
     const day = this.props.data;
+    const className = `day in ${day.isInMonthRange ? 'this-month' : 'other-month'}`;
 
     return (
-      <div className="day {day.isInMonthRange ? 'thisMonth' : 'other-month'}">
-        <span>{day.moment.format('D')}</span>
-        <div>{day.items.map(item =>
+      <li className={className}>
+        <p className="date">{day.moment.format('D')}</p>
+        <ul>{day.items.map(item =>
           <Appointment key={item.date+item.time} data={item} />
-        )}</div>
-      </div>
+        )}</ul>
+      </li>
     );
   }
 }
