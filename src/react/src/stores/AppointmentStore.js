@@ -1,35 +1,30 @@
 import momemt from 'moment';
 import alt from '../libs/alt';
 import AppointmentActions from '../actions/AppointmentActions';
+import AppointmentSource from '../sources/AppointmentSource';
 import update from 'react-addons-update';
 
 class AppointmentStore {
   constructor() {
-    this.bindActions(AppointmentActions);
     this.appointments = [];
+    this.bindActions(AppointmentActions);
+    this.registerAsync(AppointmentSource);
   }
 
-  move({sourceId, targetId}) {
-    const lanes = this.lanes;
-    const sourceLane = lanes.filter(lane => lane.notes.includes(sourceId))[0];
-    const targetLane = lanes.filter(lane => lane.notes.includes(targetId))[0];
-    const sourceNoteIndex = sourceLane.notes.indexOf(sourceId);
-    const targetNoteIndex = targetLane.notes.indexOf(targetId);
+  receivedResults(appointments) {
+    this.setState({appointments})
+  }
 
-    if ( sourceLane === targetLane ) {
-      sourceLane.notes = update(sourceLane.notes, {
-        $splice: [
-          [sourceNoteIndex, 1],
-          [targetNoteIndex, 0, sourceId]
-        ]
-      })
-    } else {
-      sourceLane.notes.splice(sourceNoteIndex, 1);
-      targetLane.notes.splice(targetNoteIndex, 0, sourceId);
-    }
+  fetchingResultsFailed(err) {
+    alert(err);
+  }
 
-    this.setState({lanes})
+  move({sourceId, date}) {
+    const appointments = this.appointments;
+    const sourceAppt = appointments.find(appt => appt.id === sourceId);
+    sourceAppt.date = date;
+    this.setState({appointments});
   }  
 }
 
-export default alt.createStore(LaneStore, 'LaneStore');
+export default alt.createStore(AppointmentStore, 'AppointmentStore');

@@ -1,5 +1,6 @@
 import React from 'react';
 import Appointment from './Appointment.jsx';
+import AppointmentActions from '../actions/AppointmentActions';
 
 export default class Day extends React.Component {
   state = {
@@ -16,12 +17,21 @@ export default class Day extends React.Component {
     });
   }
 
+  preventDefault = ev => {
+    ev.preventDefault();
+  }
+
+  drop = ev => {
+    const id = ev.dataTransfer.getData('calendar');
+    AppointmentActions.move(id, this.props.data.moment.format('M/D/YYYY'));
+  }
+
   render() {
     const day = this.props.data;
     const className = `day in ${day.isInMonthRange ? 'this-month' : 'other-month'}`;
 
     return (
-      <li className={className}>
+      <li className={className} onDragOver={this.preventDefault} onDrop={this.drop}>
         <p className="date">{day.moment.format('D')}</p>
         <ul>{day.items.map(item =>
           <Appointment key={item.date+item.time} data={item} />

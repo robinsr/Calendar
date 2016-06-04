@@ -1,37 +1,41 @@
 import AltContainer from 'alt-container';
 import React from 'react';
-
-
-import Lanes from './Lanes.jsx';
-import LaneActions from '../actions/LaneActions';
-import LaneStore from '../stores/LaneStore';
-import Days from './Days.jsx';
 import moment from 'moment';
 import getDays from '../libs/days';
+import AppointmentActions from '../actions/AppointmentActions';
+import AppointmentStore from '../stores/AppointmentStore';
+import Days from './Days.jsx';
 
 export default class App extends React.Component {
   constructor ( props ) {
     super( props );
 
-    //this.state = LaneStore.getState();
     this.now = moment().startOf('month');
+    this.appointments = [];
     this.state = {
       monthName: this.now.format('MMMM'),
       yearName: this.now.format('YYYY'),
-      days: getDays(this.now, props.items || [])
+      days: getDays(this.now, [])
     };
+
+    AppointmentStore.getAll();
   }
 
   componentDidMount() {
-    //LaneStore.listen(this.storeChanged);
+    AppointmentStore.listen(this.storeChanged);
   }
 
   componentWillUnmount() {
-    //LaneStore.unlisten(this.storeChanged);
+    AppointmentStore.unlisten(this.storeChanged);
   }
 
   storeChanged = (state) => {
-    //this.setState(state);
+    this.appointments = state.appointments;
+    this.setState({
+      monthName: this.now.format('MMMM'),
+      yearName: this.now.format('YYYY'),
+      days: getDays(this.now, this.appointments)
+    });
   }
 
   incrementMonth = () => {
@@ -39,7 +43,7 @@ export default class App extends React.Component {
     this.setState({
       monthName: this.now.format('MMMM'),
       yearName: this.now.format('YYYY'),
-      days: getDays(this.now, this.props.items || [])
+      days: getDays(this.now, this.appointments)
     });
 
   }
@@ -49,7 +53,7 @@ export default class App extends React.Component {
     this.setState({
       monthName: this.now.format('MMMM'),
       yearName: this.now.format('YYYY'),
-      days: getDays(this.now, this.props.items || [])
+      days: getDays(this.now, this.appointments)
     });
   }
 

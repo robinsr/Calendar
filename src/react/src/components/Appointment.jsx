@@ -6,12 +6,20 @@ export default class Appointment extends React.Component {
   state = {
     isShowingModal: false,
   }
+
   handleClick = () => this.setState({isShowingModal: true})
+  
   handleClose = () => this.setState({isShowingModal: false})
+
+  onDragStart = ev => {
+    console.log(this)
+    ev.dataTransfer.setData('calendar', this.props.data.id); 
+  }
+  
   render() {
     const {data} = this.props;
 
-    return <li onClick={this.handleClick}>
+    return <li classNames="item" draggable="true" onDragStart={this.onDragStart} onClick={this.handleClick}>
       <span>{data.title}</span>
       {
         this.state.isShowingModal &&
