@@ -11,11 +11,12 @@ const request = (params) => {
 };
 
 const AppointmentSource = {
-  getAll: {
+  get: {
     remote(state) {
+      const {year, month} = state;
       return request({
         type: 'GET',
-        url: '/appointments/all'
+        url: `/appointments/${year}/${month}`
       });
     },
     success: AppointmentActions.receivedResults,
