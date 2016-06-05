@@ -13,7 +13,7 @@ module.exports = function (buildOpts) {
     return buildProdBundle(buildOpts);
   });
 
-  gulp.task('watch', function () {
+  gulp.task('watch', ['compile-js:dev'], function () {
     return gulp.watch('./src/**/*.{js,jsx}', ['compile-js:dev']);
   });
 
