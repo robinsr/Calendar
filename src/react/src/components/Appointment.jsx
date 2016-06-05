@@ -1,6 +1,5 @@
 import React from 'react';
 import {ModalContainer, ModalDialog} from 'react-modal-dialog';
-import ItemTypes from '../constants/itemTypes';
 
 export default class Appointment extends React.Component {
   state = {
