@@ -12,7 +12,6 @@ export default class Appointment extends React.Component {
   handleClose = () => this.setState({isShowingModal: false})
 
   onDragStart = ev => {
-    console.log(this)
     ev.dataTransfer.setData('calendar', this.props.data.id); 
   }
   

@@ -19,11 +19,19 @@ class AppointmentStore {
     alert(err);
   }
 
+  updateSuccess() {
+    this.emitChange();
+  }
+
+  updateError(err) {
+    alert(err)
+  }
+
   move({sourceId, date}) {
     const appointments = this.appointments;
     const sourceAppt = appointments.find(appt => appt.id === sourceId);
     sourceAppt.date = date;
-    this.setState({appointments});
+    this.getInstance().update(sourceAppt);
   }  
 }
 

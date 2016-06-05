@@ -23,14 +23,17 @@ const AppointmentSource = {
   },
 
   update: {
-    remote(state) {
+    remote(state, appt) {
+      console.log(state)
       return request({
         type: 'PUT',
-        url: `/appointments/${state.id}` 
+        url: `/appointments/${appt.id}`,
+        data: JSON.stringify(appt),
+        headers: {'Content-Type': 'application/json'},
       });
     },
-    success: AppointmentActions.receivedResults,
-    error: AppointmentActions.fetchingResultsFailed
+    success: AppointmentActions.updateSuccess,
+    error: AppointmentActions.updateError
   }
 };
 

@@ -22,8 +22,9 @@ export default class Day extends React.Component {
   }
 
   drop = ev => {
-    const id = ev.dataTransfer.getData('calendar');
-    AppointmentActions.move(id, this.props.data.moment.format('M/D/YYYY'));
+    const sourceId = ev.dataTransfer.getData('calendar');
+    const date = this.props.data.moment.format('M/D/YYYY');
+    AppointmentActions.move({sourceId, date});
   }
 
   render() {
