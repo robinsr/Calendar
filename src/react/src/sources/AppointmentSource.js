@@ -24,7 +24,6 @@ const AppointmentSource = {
 
   update: {
     remote(state, appt) {
-      console.log(state)
       return request({
         type: 'PUT',
         url: `/appointments/${appt.id}`,

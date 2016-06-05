@@ -24,7 +24,7 @@ class AppointmentStore {
   }
 
   updateError(err) {
-    alert(err)
+    alert(err);
   }
 
   move({sourceId, date}) {
