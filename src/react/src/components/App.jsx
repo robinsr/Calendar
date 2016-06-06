@@ -1,4 +1,3 @@
-import AltContainer from 'alt-container';
 import React from 'react';
 import moment from 'moment';
 import getDays from '../libs/days';
