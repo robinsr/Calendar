@@ -10,6 +10,7 @@ class AppointmentStore {
     this.results = {};
     this.year;
     this.month;
+    this.selectedAppt;
     this.bindActions(AppointmentActions);
     this.registerAsync(AppointmentSource);
   }
@@ -53,6 +54,11 @@ class AppointmentStore {
       this.setState(newState);
       this.getInstance().get({year, month});
     } 
+  }
+
+  setSelected(sel) {
+    const selectedAppt = !sel ? null : this.appointments.find(appt => appt.id === sel); 
+    this.setState({ selectedAppt });
   }
 }
 

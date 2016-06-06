@@ -6,6 +6,7 @@ import AppointmentActions from '../actions/AppointmentActions';
 import AppointmentStore from '../stores/AppointmentStore';
 import { Link } from 'react-router';
 import Days from './Days.jsx';
+import Fancybox from './Fancybox.jsx'
 
 export default class App extends React.Component {
   constructor ( props ) {
@@ -14,9 +15,11 @@ export default class App extends React.Component {
     const now = moment().year(year).month(--month).day(15);
     this.state = {
       now: now,
-      days: getDays(now, [])
+      days: getDays(now, []),
+      selectedAppt: null
     };
     AppointmentActions.setDate(this.props.params);
+    AppointmentActions.setSelected(this.props.location.query.detail);
   }
 
   componentDidMount() {
@@ -28,14 +31,16 @@ export default class App extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    AppointmentActions.setDate(nextProps.params)
+    AppointmentActions.setDate(nextProps.params);
+    AppointmentActions.setSelected(nextProps.location.query.detail);
   }
 
   storeChanged = state => {
-    let {year, month, appointments} = state;
+    let {year, month, appointments, selectedAppt} = state;
     const now = moment().year(year).month(--month).day(15);
     this.setState({
       now,
+      selectedAppt,
       days: getDays(now, appointments)
     });
   }
@@ -51,6 +56,7 @@ export default class App extends React.Component {
           <Link className="item" to={forward}>Forward one month</Link>
         </div>
         <Days days={this.state.days}/>
+        <Fancybox selected={this.state.selectedAppt} />
       </div>
       );
   }

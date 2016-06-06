@@ -17,7 +17,7 @@ export default class Days extends React.Component {
     return (
       <ul id="calendar" className={classNames}>
       {headers.map(header => 
-        <li className="header">{header}</li>
+        <li className="header" key={header}>{header}</li>
       )}
       {days.map(day =>
         <Day data={day} key={day.moment.toISOString()} />

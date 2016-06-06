@@ -1,14 +1,8 @@
 import React from 'react';
-import {ModalContainer, ModalDialog} from 'react-modal-dialog';
+import moment from 'moment';
+import { Link } from 'react-router';
 
 export default class Appointment extends React.Component {
-  state = {
-    isShowingModal: false,
-  }
-
-  handleClick = () => this.setState({isShowingModal: true})
-  
-  handleClose = () => this.setState({isShowingModal: false})
 
   onDragStart = ev => {
     ev.dataTransfer.setData('calendar', this.props.data.id); 
@@ -16,20 +10,11 @@ export default class Appointment extends React.Component {
   
   render() {
     const {data} = this.props;
+    const now = moment(data.date, 'M/D/YYYY').format('YYYY/M');
+    const details = `/${now}?detail=${data.id}`;
 
     return <li classNames="item" draggable="true" onDragStart={this.onDragStart} onClick={this.handleClick}>
-      <span>{data.title}</span>
-      {
-        this.state.isShowingModal &&
-        <ModalContainer onClose={this.handleClose}>
-          <ModalDialog onClose={this.handleClose}>
-            <b>title:</b><span>{data.title}</span><br />
-            <b>date:</b><span>{data.date}</span><br />
-            <b>time:</b><span>{data.time}</span><br />
-            <b>description:</b><span>{data.description}</span><br />
-          </ModalDialog>
-        </ModalContainer>
-      }
+      <Link to={details}>{data.title}</Link>
     </li>;
   }
 }

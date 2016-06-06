@@ -6,5 +6,6 @@ export default alt.generateActions(
   'fetchingResultsFailed',
   'updateSuccess',
   'updateError',
-  'setDate'
+  'setDate',
+  'setSelected'
 );

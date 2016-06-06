@@ -246,6 +246,11 @@ body {
     .day {
         overflow: auto;
         @include sticky-note();
+        
+        a {
+            color: black;
+            text-decoration: none;
+        }
     }
 }
 
