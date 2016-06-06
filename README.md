@@ -4,7 +4,7 @@ Calendar
 
 A Simple web calendar in the vein of TodoMVC
 
-See the demo: https://robinsr-calendar.herokuapp.com/
+See the app: https://robinsr-calendar.herokuapp.com/
 
 I want to remake this app using various technologies/frameworks to showcase
 the differences in implementation between them. 
@@ -32,6 +32,8 @@ Builds:
 
 There is a lot of shared build logic in `/febs` and each version's gulp file simply configures the build system to transform files in a certain way. Each build is based on browserify. There is both a prod and dev bundle tasks. 
 
+TravisCI builds the JS bundles and runs the unit tests, and only after a successful build does heroku deploy the new version. 
+
 TODOS
 
 * ~~Vanilla~~ 
@@ -43,4 +45,14 @@ TODOS
 * ~~Vanilla ES2015~~
 * ~~CRUD service~~
 * SSR only 
+
+## Framework Comparison
+
+| framework | Lines of code | Bundle size |
+|-----------|---------------|-------------|
+| Vanilla   | 318           | 58kb        |
+| Backbone  | 298           | 212kb       |
+| Knockout  | 353           | 233kb       |
+| Angular   | 320           | 360kb       |
+| React     | 321           | 514kb       |
 
