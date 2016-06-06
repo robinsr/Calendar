@@ -2,7 +2,6 @@ import momemt from 'moment';
 import alt from '../libs/alt';
 import AppointmentActions from '../actions/AppointmentActions';
 import AppointmentSource from '../sources/AppointmentSource';
-import update from 'react-addons-update';
 
 class AppointmentStore {
   constructor() {
