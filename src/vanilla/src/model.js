@@ -5,40 +5,64 @@
 import moment from 'moment';
 import uuid from 'uuid-v4';
 import { EventEmitter } from './util';
+import service from './service';
 
 export default class Model extends EventEmitter {
-  constructor(service) {
+  constructor() {
     super();
 
     this.now = moment().day(15);
     this.items = [];
 
     service.getItems().then(items => {
-      this.items = items.map(item => Object.assign(item, {id: uuid()}));
+      this.items = items;
       this.trigger('sync');
     })
   }
 
-  moveAppointment(key, date) {
-    var appt = this.items.filter(item => item.id === key)[0];
-    appt.date = moment(date).format('M/D/YYYY');
-    this.trigger('update');
+  moveAppointment(id, date) {
+    date = moment(date).format('M/D/YYYY');
+    let appt = this.items.find(item => item.id === id);
+    let data
+
+    if (appt) {
+      appt.date = date;
+      data = appt;
+    } else {
+      data = { id, date };
+    }
+
+    service.updateItem(data)
+      .then(() => {
+        if (appt) {
+          this.trigger('update');
+        } else {
+          this.getItems();
+        }
+      });
   }
 
   incrementMonth() {
     this.now.add(1, 'month');
+    this.getItems();
   }
 
   decrementMonth() {
-    this.now.subtract(1, 'month')
+    this.now.subtract(1, 'month');
+    this.getItems();
   }
 
   setDate(month, year) {
     this.now.month(month).year(year);
+    this.getItems();
   }
 
-  setItems(items) {
-    this.items = items;
+  getItems() {
+    service.getMonth(this.now.month(), this.now.year())
+      .then(items => {
+        this.items = items;
+        this.trigger('sync');
+      });
   }
 
   // TODO this function is common to all versions. Refactor to common

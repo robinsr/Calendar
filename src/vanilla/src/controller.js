@@ -14,6 +14,7 @@ export default class Controller {
     $on(this.view, 'itemDrag', this.onDrag.bind(this));
     $on(this.view, 'itemDrop', this.onDrop.bind(this));
     $on(this.view, 'itemClick', this.onClick.bind(this));
+    $on(this.view, 'setDate', this.setView.bind(this));
   }
 
   setView(hash) {

@@ -2,12 +2,16 @@
  * Fetches items from the backend
  */
 
-export default class Service {
-  getItems() {
+const request = (type, url, data=null) => {
     return new Promise(function (resolve, reject) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/common/data/items.json');
-      xhr.send(null);
+      const xhr = new XMLHttpRequest();
+      xhr.open(type, url);
+
+      if (data) {
+        xhr.setRequestHeader('Content-Type', 'application/json');
+      }
+
+      xhr.send(data);
       xhr.onreadystatechange = function () {
         const DONE = 4;
         const OK = 200; 
@@ -25,5 +29,20 @@ export default class Service {
         }
       };
     });
-  }
 }
+
+const service = {
+  getItems() {
+    return request('GET', '/appointments/all');
+  },
+
+  getMonth(month, year) {
+    return request('GET', `/appointments/${year}/${++month}`);
+  },
+
+  updateItem(item) {
+    return request('PUT', `/appointments/${item.id}`, JSON.stringify(item));
+  }
+};
+
+export default service;

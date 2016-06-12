@@ -5,14 +5,12 @@
 import Model from './model';
 import View from './view';
 import Controller from './controller';
-import Service from './service';
 import { $on } from './util';
 
 class App {
   constructor() {
-    this.service = new Service();
     this.view = new View();
-    this.model = new Model(this.service);
+    this.model = new Model();
     this.controller = new Controller(this.view, this.model);
   }
 }

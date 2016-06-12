@@ -6,6 +6,12 @@ import { $delegate, qs } from './util';
 import { about, calendar, details } from './template';
 import { EventEmitter } from './util';
 
+/**
+ * stores the setTimeout when user drags an appt over one
+ * of the forward or backward controls. 
+ */
+let changeMonthDelay;
+
 export default class View extends EventEmitter {
     constructor() {
       super();
@@ -34,7 +40,7 @@ export default class View extends EventEmitter {
 
       $delegate(_tar, '.day', 'dragenter', e => {
         e.preventDefault();
-      } );
+      });
 
       $delegate(_tar, '.day', 'drop', e => {
         this.trigger('itemDrop', e);
@@ -47,7 +53,18 @@ export default class View extends EventEmitter {
 
       $delegate(_body, '#aboutButton', 'click', e => {
         this.showAboutModal(); 
-      })
+      });
+
+      $delegate(_body, '#controls a.item', 'dragenter', e => {
+        changeMonthDelay = setTimeout(() => {
+          clearTimeout(changeMonthDelay);
+          this.trigger('setDate', e.target.hash);
+        }, 1200);
+      });
+
+      $delegate(_body, '#controls a.item', 'dragleave', e => {
+        clearTimeout(changeMonthDelay);
+      });      
     }
 
     showAboutModal() {
@@ -65,6 +82,8 @@ export default class View extends EventEmitter {
     }
 
     render(data) {
+      console.log('render')
+      clearTimeout(changeMonthDelay);
       this._tar.innerHTML = calendar(data);
     }
 };
