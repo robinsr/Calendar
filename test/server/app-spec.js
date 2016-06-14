@@ -1,13 +1,12 @@
 const app = require('../../src/server/app');
+const { db, expressIntstance } = app;
 const consts = require('../../src/server/consts');
 const helpers = require('./helpers');
 const supertest = require('supertest');
-const mongoose = require('mongoose');
 const moment = require('moment');
 const assert = require('assert');
 
-const Appointment = mongoose.model('Appointment');
-const agent = supertest.agent(app);
+const agent = supertest.agent(expressIntstance);
 const acceptHeader = ['Accept', 'application/json'];
 
 const responseOk = (appt1, appt2) => {
@@ -29,7 +28,6 @@ const monthMatch = (appt, month) => {
 
 describe('Express server', () => {
   before(helpers.setupDb);
-  after(helpers.clearDb);
 
   describe('get /', () => {
     it('should return the index page', done => {
@@ -100,52 +98,32 @@ describe('Express server', () => {
 
   describe('post /appointments/:id', () => {
     it('should update an appointment title', done => {
-      Appointment.findOne({}, (err, doc) => {
-        if (err) throw err;
-        const id = doc._id;
-        const title = 'This is an updated title';
-        agent.post(`/appointments/${id}`)
-          .send({ title })
-          .set(...acceptHeader)
-          .expect(200)
-          .end(() => {
-            Appointment.findById(id, (err, doc) => {
-              if (err) throw err;
-              if (!doc) throw new Error('Matching doc not found');
-              assert.equal(doc.title, title);
-              done();
-            });
-          });
-      });
+      const doc = db.store[0];
+      const title = 'This is an updated title';
+      agent.post(`/appointments/${doc.id}`)
+        .send({ title })
+        .set(...acceptHeader)
+        .expect(200)
+        .end(() => {
+          assert.equal(doc.title, title);
+          done();
+        });
     });
 
     it('should update an appointment date', done => {
       const parentDate = moment().add(1, 'month').startOf('month').day(1);
       const start = moment(parentDate).startOf('day').toDate();
       const end = moment(parentDate).endOf('day').toDate();
-      Appointment.findOne({
-        datetime: {
-          $gt: start,
-          $lt: end
-        }
-      }, (err, doc) => {
-        if (err) throw err;
-        if (!doc) throw new Error('No starting doc found');
-        const id = doc._id;
-        const date = moment(doc.date, consts.DATE).add(1, 'day').format(consts.DATE);
-        agent.post(`/appointments/${id}`)
-          .send({ date })
-          .set(...acceptHeader)
-          .expect(200)
-          .end(() => {
-            Appointment.findById(id, (err, doc) => {
-              if (err) throw err;
-              if (!doc) throw new Error('Matching doc not found');
-              assert.equal(doc.date, date);
-              done();
-            });
-          });
-      });
+      const doc = db.store[0];
+      const date = moment(doc.date, consts.DATE).add(1, 'day').format(consts.DATE);
+      agent.post(`/appointments/${doc.id}`)
+        .send({ date })
+        .set(...acceptHeader)
+        .expect(200)
+        .end(() => {
+          assert.equal(doc.date, date);
+          done();
+        });
     });
   });
 });

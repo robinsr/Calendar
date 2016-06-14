@@ -1,112 +1,50 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const moment = require('moment');
 const path = require('path');
+const uuid = require('uuid-v4');
 const jsonParser = require('body-parser').json();
-
 const consts = require('./consts');
+const items = require('../common/data/items.json');
 
-if (!process.env.MONGO_URL) throw new Error('App requires env var MONGO_URL');
+const db = {
+  store: [],
 
-const serializeOpts = {
-  virtuals: true,
-  transform: function (doc, ret, options) {
-    // remove the _id of every document before returning the result
-    delete ret._id;
-    delete ret.datetime;
-  }
-};
-
-// Mongoose appointment schema setup
-const AppointmentSchema = new mongoose.Schema({
-  datetime: { type: Date },
-  title: { type: String },
-  description: { type: String }
-}, {
-  toObject: { virtuals: true },
-  toJSON: serializeOpts
-});
-
-
-AppointmentSchema.virtual('date')
-  .get(function() {
-    return moment(this.datetime).format(consts.DATE);
-  })
-  .set(function (date) {
-    const {time} = this;
-    this.datetime = moment(`${date} ${time}`, consts.DATETIME).toDate();
-  });
-
-AppointmentSchema.virtual('time')
-  .get(function() {
-    return moment(this.datetime).format(consts.TIME);
-  })
-  .set(function (time) {
-    const {date} = this;
-    this.datetime = moment(`${date} ${time}`, consts.DATETIME).toDate();
-  });
-
-AppointmentSchema.pre('save', function(next) {
-  const { date, time } = this;
-  this.datetime = moment(`${date} ${time}`, consts.DATETIME).toDate();
-  next();
-});
-
-AppointmentSchema.statics.findByMonth = function (year, month) {
-  const start = moment().year(year).month(month).startOf('month').toDate();
-  const end = moment().year(year).month(month).endOf('month').toDate();
-  
-  return this
-    .find({})
-    .where('datetime')
-    .gt(start)
-    .lt(end)
-    .sort({ datetime: -1 })
-    .exec();
-};
-
-AppointmentSchema.statics.findAll = function () {
-  return this
-    .find({})
-    .sort({ datetime: -1 })
-    .exec();
-};
-
-AppointmentSchema.statics.update = function (id, newData) {
-  return new Promise((resolve, reject) => {
-    this.findById(id, function (err, doc) {
-      if (err) return reject(err);
-      if (!doc) return reject(new Error('Doc not found'));
-      Object.assign(doc, newData);
-      doc.save(function (err) {
-        err ? reject(err) : resolve(doc);
+  bootstrap() {
+    this.store = items.map(item => {
+      const { date, time } = item;
+      return Object.assign(item, {
+        id: uuid(),
+        datetime: moment(`${date} ${time}`, 'M/D/YYYY h:mm:ss A').toDate()
       });
     });
-  });
-}
+  },
 
-const Appointment = mongoose.model('Appointment', AppointmentSchema);
+  sorter(a, b) {
+    return a.datetime.getTime() > b.datetime.getTime() ? 1 : -1;
+  },
 
-// Mongoose connection setup
-const connect = () => {
-  console.log("mongo url: " + process.env.MONGO_URL);
-  const options = {
-    server: {
-      socketOptions: {
-        keepAlive: 1
-      }
-    }
+  findByMonth (year, month) {
+    const start = moment().year(year).month(month).startOf('month').toDate();
+    const end = moment().year(year).month(month).endOf('month').toDate();
+    const params = { datetime: { $gt: start, $lt: end } };
+    const results = this.store
+      .filter(obj => moment(obj.datetime).isBetween(start, end))
+      .sort(this.sorter)
+    return Promise.resolve(results);
+  },
+
+  findAll() {
+    return Promise.resolve(this.store.sort(this.sorter));
+  },
+
+  update(id, newData) {
+    const appt = this.store.find(appt => appt.id === id);
+    if (!appt) return Promise.reject(new Error('Doc not found'));
+    Object.assign(appt, newData);
+    appt.datetime = moment(`${appt.date} ${appt.time}`, consts.DATETIME).toDate();
+    return Promise.resolve(appt);
   }
-  mongoose.connect(process.env.MONGO_URL, options)
-}
-
-connect();
-
-// Error handler
-mongoose.connection.on('error', console.error);
-
-// Reconnect when closed
-mongoose.connection.on('disconnected', connect);
+};
 
 // Express setup
 const app = express();
@@ -114,19 +52,17 @@ const app = express();
 // Static files from /src
 app.use(express.static(path.resolve(__dirname, '..')));
 
-const handleItemsQuery = (query, res) => {
+const handleQueryResponse = (query, res) => {
   query
-    .onFulfill(items => {
-      return res.json(items);
-    })
-    .onReject(err => {
+    .then(items => res.json(items))
+    .catch(err => {
       console.error(err);
       return res.status(500).json(err);
     });
 };
 
 const handleUpdateOrCreate = (req, res) => {
-  Appointment.update(req.params.id, req.body)
+  db.update(req.params.id, req.body)
   .then(items => res.json(items))
   .catch(err => {
     console.error(err);
@@ -136,17 +72,17 @@ const handleUpdateOrCreate = (req, res) => {
 
 app.get('/appointments/:year/:month', (req, res) => {
   let { year, month } = req.params;
-  handleItemsQuery(Appointment.findByMonth(year, --month), res);
+  handleQueryResponse(db.findByMonth(year, --month), res);
 });
 
 app.get('/appointments', (req, res) => {
   const year = moment().year();
   const month = moment().month();
-  handleItemsQuery(Appointment.findByMonth(year, month), res);
+  handleQueryResponse(db.findByMonth(year, month), res);
 });
 
 app.get('/appointments/all', (req, res) => {
-  handleItemsQuery(Appointment.findAll(), res);
+  handleQueryResponse(db.findAll(), res);
 });
 
 app.post('/appointments/:id', jsonParser, handleUpdateOrCreate);
@@ -157,4 +93,13 @@ app.use((req, res, next) => {
   res.status(404).send('404 - Not Found');
 });
 
-module.exports = app;
+// bootstrap appointments
+if (process.env.NODE_ENV.match(/(prod|dev)/)) {
+  db.bootstrap();
+  module.exports = app;
+}
+
+if (process.env.NODE_ENV === 'test') {
+  module.exports.expressIntstance = app;
+  module.exports.db = db;
+}
