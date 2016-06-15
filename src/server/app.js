@@ -2,28 +2,38 @@ const express = require('express');
 const moment = require('moment');
 const path = require('path');
 const uuid = require('uuid-v4');
+const lorem = require('lorem-ipsum');
 const jsonParser = require('body-parser').json();
 const consts = require('./consts');
-const items = require('../common/data/items.json');
+
+const prng = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+};
 
 const db = {
   store: [],
 
   bootstrap() {
-    this.store = items.map(item => {
-      const { date, time } = item;
-      return Object.assign(item, {
+    const start = moment().subtract(1, 'year').valueOf();
+    const end = moment().add(1, 'year').valueOf();
+    for (var i = 0; i < 500; i++) {
+      let now = moment(prng(start, end));
+      this.store.push({
+        title: lorem({ units: 'word', count: prng(2, 5) }),
+        description: lorem({ units: 'sentences', count: 2 }),
+        date: now.format(consts.DATE),
+        time: now.format(consts.TIME),
+        datetime: now.toDate(),
         id: uuid(),
-        datetime: moment(`${date} ${time}`, 'M/D/YYYY h:mm:ss A').toDate()
       });
-    });
+    }
   },
 
   sorter(a, b) {
     return a.datetime.getTime() > b.datetime.getTime() ? 1 : -1;
   },
 
-  findByMonth (year, month) {
+  findByMonth(year, month) {
     const start = moment().year(year).month(month).startOf('month').toDate();
     const end = moment().year(year).month(month).endOf('month').toDate();
     const params = { datetime: { $gt: start, $lt: end } };

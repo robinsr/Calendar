@@ -35,6 +35,7 @@
     "handlebars": "^4.0.5",
     "jquery": "^2.1.4",
     "knockout": "^3.4.0",
+    "lorem-ipsum": "^1.0.3",
     "moment": "^2.10.6",
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
