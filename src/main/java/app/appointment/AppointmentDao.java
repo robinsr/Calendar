@@ -1,5 +1,7 @@
 package app.appointment;
 
+import com.thedeanda.lorem.Lorem;
+import com.thedeanda.lorem.LoremIpsum;
 import lombok.Getter;
 import org.joda.time.DateTime;
 
@@ -29,8 +31,9 @@ public class AppointmentDao {
     }
 
     public void bootstrap() {
-        long start = DateTime.now().minusDays(365).getMillis();
-        long end = DateTime.now().plus(365).getMillis();
+        Lorem lorem = LoremIpsum.getInstance();
+        long start = DateTime.now().minusYears(1).getMillis();
+        long end = DateTime.now().plusYears(1).getMillis();
         ThreadLocalRandom t = ThreadLocalRandom.current();
 
         for (int i = 0; i < 500; i++) {
@@ -43,8 +46,8 @@ public class AppointmentDao {
             newAppt.setDateTime(now);
             newAppt.setDate(now.toString(DateFormats.DATE));
             newAppt.setTime(now.toString(DateFormats.TIME));
-            newAppt.setDescription("");
-            newAppt.setTitle("");
+            newAppt.setDescription(lorem.getWords(10, 20));
+            newAppt.setTitle(lorem.getTitle(2, 5));
 
             appointments.add(newAppt);
         }

@@ -3,6 +3,8 @@ package app;
 import app.appointment.AppointmentController;
 import app.appointment.AppointmentDao;
 import app.util.Filters;
+import spark.Request;
+import spark.Response;
 
 import static spark.Spark.*;
 
@@ -18,13 +20,20 @@ public class Application {
         staticFiles.location("/public");
         staticFiles.expireTime(600L);
 
-        get("/appointments/:year/:month", AppointmentController.getAppointmentsByYearAndMonth);
-        get("/appointments/all", AppointmentController.getAllAppointments);
-        get("/appointments", AppointmentController.getRecentAppointments);
+        path("/appointments", () -> {
+            before("/*",            Filters.addJsonHeader);
+            before("/:id",          Filters.parseAppointmentJson);
+            get("/",                AppointmentController.getRecentAppointments);
+            get("/all",             AppointmentController.getAllAppointments);
+            get("/:year/:month",    AppointmentController.getAppointmentsByYearAndMonth);
+            put("/:id",             AppointmentController.updateAppointment);
+            post("/:id",            AppointmentController.createAppointment);
+        });
 
-        before("/appointments/:id", Filters.parseAppointmentJson);
-        post("/appointments/:id", AppointmentController.createAppointment);
-        put("/appointments/:id", AppointmentController.updateAppointment);
+        notFound((Request req, Response res) -> {
+            res.header("Content-Type", "text/html");
+            return "Not found";
+        });
 
         appointmentDao.bootstrap();
     }

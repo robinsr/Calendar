@@ -14,4 +14,8 @@ public class Filters {
             req.attribute("appt", appt);
         }
     };
+
+    public static Filter addJsonHeader = (Request req, Response res) -> {
+        res.header("Content-Type", "application/json");
+    };
 }
