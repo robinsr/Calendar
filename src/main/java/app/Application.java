@@ -20,6 +20,8 @@ public class Application {
         staticFiles.location("/public");
         staticFiles.expireTime(600L);
 
+        before("*",                 Filters.addTrailingSlashes);
+
         path("/appointments", () -> {
             before("/*",            Filters.addJsonHeader);
             before("/:id",          Filters.parseAppointmentJson);

@@ -3,11 +3,11 @@ var hub = require('gulp-hub');
 
 gulp.task('default', function () {
   return hub([
-    './src/common/gulpfile.js',
-    './src/backbone/gulpfile.js',
-    './src/knockout/gulpfile.js',
-    './src/angular/gulpfile.js',
-    './src/vanilla/gulpfile.js',
-    './src/react/gulpfile.js',
+    './src/main/resources/public/common/gulpfile.js',
+    './src/main/resources/public/backbone/gulpfile.js',
+    './src/main/resources/public/knockout/gulpfile.js',
+    './src/main/resources/public/angular/gulpfile.js',
+    './src/main/resources/public/vanilla/gulpfile.js',
+    './src/main/resources/public/react/gulpfile.js',
   ]);
 })
