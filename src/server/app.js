@@ -1,115 +1,91 @@
-const express = require('express');
-const moment = require('moment');
 const path = require('path');
-const uuid = require('uuid-v4');
-const lorem = require('lorem-ipsum');
-const jsonParser = require('body-parser').json();
-const consts = require('./consts');
+const url = require('url');
+const fs = require('fs');
+const http = require('http');
+const buffer = require('buffer').Buffer;
+const appConsts = require('./consts');
 
-const prng = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min
-};
+const { APPTS_SERVICE_HOST, APPTS_SERVICE_PORT } = appConsts.SERVICE_CONFIG;
 
-const db = {
-  store: [],
+const staticFilesPath = path.resolve(__dirname, '..');
+const { CONTENT_TYPES } = appConsts;
 
-  bootstrap() {
-    const start = moment().subtract(1, 'year').valueOf();
-    const end = moment().add(1, 'year').valueOf();
-    for (var i = 0; i < 500; i++) {
-      let now = moment(prng(start, end));
-      this.store.push({
-        title: lorem({ units: 'word', count: prng(2, 5) }),
-        description: lorem({ units: 'sentences', count: 2 }),
-        date: now.format(consts.DATE),
-        time: now.format(consts.TIME),
-        datetime: now.toDate(),
-        id: uuid(),
-      });
+const objToLogFormat = (obj, prefix = '') => {
+  let str = '';
+  for (prop in obj) {
+    if (typeof obj[prop] === 'object') {
+      str += objToLogFormat(obj[prop], prefix + prop + '.');
+    } else if (typeof obj[prop] !== 'function') {
+      str += prefix + prop + '="' + obj[prop] + '" ';
     }
-  },
-
-  sorter(a, b) {
-    return a.datetime.getTime() > b.datetime.getTime() ? 1 : -1;
-  },
-
-  findByMonth(year, month) {
-    const start = moment().year(year).month(month).startOf('month').toDate();
-    const end = moment().year(year).month(month).endOf('month').toDate();
-    const params = { datetime: { $gt: start, $lt: end } };
-    const results = this.store
-      .filter(obj => moment(obj.datetime).isBetween(start, end))
-      .sort(this.sorter)
-    return Promise.resolve(results);
-  },
-
-  findAll() {
-    return Promise.resolve(this.store.sort(this.sorter));
-  },
-
-  update(id, newData) {
-    const appt = this.store.find(appt => appt.id === id);
-    if (!appt) return Promise.reject(new Error('Doc not found'));
-    Object.assign(appt, newData);
-    appt.datetime = moment(`${appt.date} ${appt.time}`, consts.DATETIME).toDate();
-    return Promise.resolve(appt);
   }
+  return str;
 };
 
-// Express setup
-const app = express();
+const handleAppointmentsApiRequest = (req, res) => {
+  let proxyRequestConfig = { 
+    protocol: 'http:',
+    method: req.method,
+    headers: Object.assign({}, req.headers, { host: null }),
+    host: process.env.APPTS_SERVICE_HOST || APPTS_SERVICE_HOST,
+    port: process.env.APPTS_SERVICE_PORT || APPTS_SERVICE_PORT,
+    path: req.url.match(/\/appointments(\/?.*)$/)[1]
+  };
 
-// Static files from /src
-app.use(express.static(path.resolve(__dirname, '..')));
+  console.log('Proxy request: ' + objToLogFormat(
+    Object.assign({}, proxyRequestConfig, { originalUrl: req.url }))
+  );
 
-const handleQueryResponse = (query, res) => {
-  query
-    .then(items => res.json(items))
-    .catch(err => {
-      console.error(err);
-      return res.status(500).json(err);
-    });
+  let proxyReq = http.request(proxyRequestConfig, (proxyRes) => {
+    let { statusCode, headers } = proxyRes;
+    console.log('Proxy response: ' + objToLogFormat({ statusCode, headers }));
+    res.writeHead(statusCode, headers);
+    proxyRes.pipe(res, { end: true });
+  });
+
+  req.pipe(proxyReq, { end: true });
 };
 
-const handleUpdateOrCreate = (req, res) => {
-  db.update(req.params.id, req.body)
-  .then(items => res.json(items))
-  .catch(err => {
-    console.error(err);
-    return res.status(500).json(err);
+const handleStaticFileRequest = (req, res) => {
+  let { method, url } = req;
+
+  if (/\/$/.test(url)) {
+    url += 'index.html';
+  }
+
+  let filepath = path.join(staticFilesPath, url);
+  
+  let contentType = CONTENT_TYPES[path.extname(url)];
+
+  fs.readFile(filepath, (err, contents) => {
+    let statusCode = err ? 404 : 200;
+    let headers;
+
+    if (err) {
+      res.writeHead(statusCode);
+      res.end('Not found');
+    } else {
+      headers = { 
+        'Content-Type': contentType,
+        'Content-Length': buffer.byteLength(contents)
+      };
+      res.writeHead(statusCode, headers);
+      res.end(contents, 'utf8');
+    }
+    
+    console.log('Static handle: ', objToLogFormat({ method, url, statusCode, filepath, headers }));
   });
 };
 
-app.get('/appointments/:year/:month', (req, res) => {
-  let { year, month } = req.params;
-  handleQueryResponse(db.findByMonth(year, --month), res);
+const acceptor = http.createServer();
+
+// Proxy requests to appointments service
+acceptor.on('request', (req, res) => {
+  if (/\/appointments\/?.*$/.test(req.url)) {
+    return handleAppointmentsApiRequest(req, res);
+  } else {
+    return handleStaticFileRequest(req, res);
+  }
 });
 
-app.get('/appointments', (req, res) => {
-  const year = moment().year();
-  const month = moment().month();
-  handleQueryResponse(db.findByMonth(year, month), res);
-});
-
-app.get('/appointments/all', (req, res) => {
-  handleQueryResponse(db.findAll(), res);
-});
-
-app.post('/appointments/:id', jsonParser, handleUpdateOrCreate);
-app.put('/appointments/:id', jsonParser, handleUpdateOrCreate);
-
-// Assume 404 since no middleware responded
-app.use((req, res, next) => {
-  res.status(404).send('404 - Not Found');
-});
-
-// bootstrap appointments
-if (process.env.NODE_ENV.match(/(prod|dev)/)) {
-  db.bootstrap();
-  module.exports = app;
-}
-
-if (process.env.NODE_ENV === 'test') {
-  module.exports.expressIntstance = app;
-  module.exports.db = db;
-}
+module.exports = acceptor;
