@@ -31,12 +31,19 @@ const monthMatch = (appt, month) => {
 describe('Express server', () => {
   
   describe('get /', () => {
-    it('should return the index page', done => {
+    it('should redirect to the index page', done => {
       agent.get('/')
+        .expect(302)
+        .expect('Location', '/index.html')
+        .end(done);
+    });
+
+    it('should return the index page', done => {
+      agent.get('/index.html')
         .expect(200)
         .expect(/Calendar/)
         .end(done);
-    });
+    })
   });
 
   describe('get /appointments', () => {
