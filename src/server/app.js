@@ -49,8 +49,13 @@ const handleAppointmentsApiRequest = (req, res) => {
 const handleStaticFileRequest = (req, res) => {
   let { method, url } = req;
 
-  if (/\/$/.test(url)) {
-    url += 'index.html';
+  if (!/\.[a-z]{2,4}$/.test(url)) {
+    console.log('Rewriting URL: ' + url + ' -> ' + url + '/index.html');
+    res.writeHead(302, {
+      'Location': url.replace(/\/$/,'') + '/index.html'
+    });
+
+    return res.end();
   }
 
   let filepath = path.join(staticFilesPath, url);
