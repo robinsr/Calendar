@@ -1,7 +1,7 @@
 <div id="controls">
-    <a class="item" ng-href="#/{{ previous|formatDate:'YYYY' }}/{{ previous|formatDate:'M' }}" triggers-refresh>Back one month</a>
+    <a class="item" ng-href="#!/{{ previous|formatDate:'YYYY' }}/{{ previous|formatDate:'M' }}" triggers-refresh>Back one month</a>
     <p class="item" >{{ current|formatDate:'MMMM' }}, {{ current|formatDate:'YYYY' }}</p>
-    <a class="item" ng-href="#/{{ next|formatDate:'YYYY' }}/{{ next|formatDate:'M' }}" triggers-refresh>Forward one month</a>
+    <a class="item" ng-href="#!/{{ next|formatDate:'YYYY' }}/{{ next|formatDate:'M' }}" triggers-refresh>Forward one month</a>
 </div>
 
 <ul id="calendar" class="weeks-{{ weekCount }}" ng-init="headers = [0,1,2,3,4,5,6]">
@@ -10,7 +10,7 @@
         <p class="date">{{ day|formatDate:'Do' }}</p>
         <ul>
             <li ng-repeat="item in items | dateMatch:day" class="item" draggable="true" drag-item>
-                <a ng-href="#/{{ current|formatDate:'YYYY' }}/{{ current|formatDate:'M' }}?item={{item.key}}">{{ item.title }}</a>
+                <a ng-href="#!/{{ current|formatDate:'YYYY' }}/{{ current|formatDate:'M' }}?item={{item.key}}">{{ item.title }}</a>
             </li>
         </ul>
     </li>
@@ -25,7 +25,7 @@
             <p class="date">{{ day|formatDate:'M/DD/YYYY' }}</p>
             <ul>
                 <li ng-repeat="item in items | dateMatch:day" class="item">
-                    <a ng-href="#/{{ current|formatDate:'YYYY' }}/{{ current|formatDate:'M' }}?item={{item.key}}">{{ item.title }}</a>
+                    <a ng-href="#!/{{ current|formatDate:'YYYY' }}/{{ current|formatDate:'M' }}?item={{item.key}}">{{ item.title }}</a>
                 </li>
             </ul>
         </li>
@@ -42,6 +42,6 @@
     <p class="eventDetailsItem">time:</p> <span>{{ itemDetail.time }}</span><br>
     <p class="eventDetailsItem">description:</p><span>{{ itemDetail.description }}</span><br>
     <div class="closeModal">
-        <p><a ng-href="#/{{ current|formatDate:'YYYY' }}/{{ current|formatDate:'M' }}">click here to close</a></p>
+        <p><a ng-href="#!/{{ current|formatDate:'YYYY' }}/{{ current|formatDate:'M' }}">click here to close</a></p>
     </div>
 </div>

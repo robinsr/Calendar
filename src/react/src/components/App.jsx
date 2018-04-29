@@ -11,7 +11,7 @@ export default class App extends React.Component {
   constructor ( props ) {
     super( props );
     let {year, month} = this.props.params;
-    const now = moment().year(year).month(--month).day(15);
+    const now = moment().year(year).month(parseInt(month, 10) - 1).date(15);
     this.state = {
       now: now,
       days: getDays(now, []),
@@ -36,7 +36,7 @@ export default class App extends React.Component {
 
   storeChanged = state => {
     let {year, month, appointments, selectedAppt} = state;
-    const now = moment().year(year).month(--month).day(15);
+    const now = moment().year(year).month(parseInt(month, 10) - 1).date(15);
     this.setState({
       now,
       selectedAppt,
