@@ -12,7 +12,7 @@ the differences in implementation between them.
 The basic requirements for each version are as follows:
 
 * Should render
-* It should look nice
+* It should look ~~nice~~ ok
 * Days should be numbered correctly
 * Days in the month should be visually distinct from leading/trailing days
 * Days should list events that happen on that day
@@ -21,7 +21,7 @@ The basic requirements for each version are as follows:
 
 Extras:
 
-* It should look _really_ nice, and have animations
+* It should look ~~really~~ nice, and have animations
 * It should have some sort of URL routing
 * It should have tests
 * It should load events from a service
